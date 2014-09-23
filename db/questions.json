@@ -1,0 +1,390 @@
+[
+  {
+    "title": "Information und Materialien",
+    "description": "Sämtliche Informationen und für das Studium notwendige Materialien sind auf dem Lernmanagementsystem Moodle bereitgestellt und jederzeit (ab Bereitstellung) für die Studierenden in strukturierter und übersichtlicher Form zugänglich.",
+    "description_detail": "Zur Organisation von Lehrgangsbelangen werden primär die entsprechenden Möglichkeiten des Lernmanagementsystems Moodle oder eines zumindest gleichwertigen Systems kontinuierlich genutzt.",
+    "shorttitle": "1.",
+    "questiongroups": [
+      {
+        "title": "administrative Elemente",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Termine"
+          },
+          {
+            "type": "dropdown",
+            "title": "Modulbeschreibungen"
+          },
+          {
+            "type": "dropdown",
+            "title": "Lernzielbeschreibungen"
+          },
+          {
+            "type": "dropdown",
+            "title": "aktuelle Ankündigungen (News)"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      },
+      {
+        "title": "statische und dynamische Inhalte",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Glossar"
+          },
+          {
+            "type": "dropdown",
+            "title": "FAQ"
+          }
+          ,
+          {
+            "type": "dropdown",
+            "title": "Fotos"
+          },
+          {
+            "type": "dropdown",
+            "title": "Videos"
+          },
+          {
+            "type": "dropdown",
+            "title": "Audio"
+          },
+          {
+            "type": "dropdown",
+            "title": "andere Formen multimedialen Inhalts informativen Charakters (Podcasts, Slidecasts, Lernspiele, …)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Kommunikation Betreuung",
+    "description": "Die Kommunikation zwischen Betreuenden und Studierenden wird aktiv betrieben.",
+    "description_detail": "Es werden folgende kommunikationsfördernde Möglichkeiten genützt:",
+    "shorttitle": "2.1",
+    "questiongroups": [
+      {
+        "title": "",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Bereitstellung von und Hinweise auf synchrone oder asynchrone Werkzeuge (bspw. Wiki, Chat, Forum, Skype, Virtual Classroom, Social Media, …)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Vermittlung von Know-How (Schulungen, Tutorials) zur Nutzung von synchronen oder asynchronen Kommunikationsformen"
+          },
+          {
+            "type": "dropdown",
+            "title": "Vermittlung zwischen Aktivitäten der Studierenden mit externen ReferentInnen (bspw. in den Foren)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Aktive Förderung der Kommunikation und Kooperation durch Motivation und Moderation der Diskussionen durch die Lehrgangsbetreuung"
+          },
+          {
+            "type": "dropdown",
+            "title": "Angebote für virtuelle Sprechstunden der Lehrgangsleitung"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Kommunikation Referenten",
+    "description": "Die Kommunikation zwischen ReferentInnen und Studierenden wird aktiv betrieben.",
+    "description_detail": "Es werden folgende kommunikationsfördernde Möglichkeiten genützt:",
+    "shorttitle": "2.2",
+    "questiongroups": [
+      {
+        "title": "",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Bereitstellung von und Hinweise auf synchrone oder asynchrone Werkzeuge (bspw. Wiki, Chat, Forum, Skype, Virtual Classroom, Social Media, …)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Vermittlung von Know-How (Schulungen, Tutorials) zur Nutzung von synchronen oder asynchronen Kommunikationsformen"
+          },
+          {
+            "type": "dropdown",
+            "title": "Vermittlung zwischen Aktivitäten der Studierenden mit externen ReferentInnen (bspw. in den Foren)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Aktive Förderung der Kommunikation und Kooperation durch Motivation und Moderation der Diskussionen durch die Lehrgangsbetreuung"
+          },
+          {
+            "type": "dropdown",
+            "title": "Angebote für virtuelle Sprechstunden der Lehrgangsleitung"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Lernprozesse Umfang",
+    "description": "Lernprozesse in Form von E-Learning werden im höchstmöglichen Umfang eingesetzt",
+    "description_detail": "Es werden folgende Elemente oder Werkzeuge eingesetzt bzw. ermöglicht:",
+    "shorttitle": "3.1",
+    "questiongroups": [
+      {
+        "title": "Moodle Elemente",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Hochladen von individuellen Arbeiten oder Gruppenarbeiten  (Modularbeiten, Zusammenfassungen, Projektarbeiten)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Tests zur Überprüfung der Erreichung der Lernziele"
+          },
+          {
+            "type": "dropdown",
+            "title": "Selbsttests zur Reflexion des aktuellen Wissensstandes"
+          },
+          {
+            "type": "dropdown",
+            "title": "Selbstlerneinheiten (interaktive Lektionen)"
+          },
+          {
+            "type": "dropdown",
+            "title": "aktive Beteiligung bei Fachdiskussionen in Foren"
+          },
+          {
+            "type": "dropdown",
+            "title": "gegenseitiges Feedback (Peer-Review)"
+          },
+          {
+            "type": "dropdown",
+            "title": "gemeinsame Erstellung von Inhalten (bspw. in Wikis)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Erstellung einer gemeinsamen Wissensbasis (bspw. mit Glossar)"
+          },
+          {
+            "type": "dropdown",
+            "title": "verbindliche Verwendung eines Lerntagebuchs (bspw. mit Journal)"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      },
+      {
+        "title": "andere Werkzeuge",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Lernprozessmanagement mit E-Portfolio (bspw. Mahara)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Gemeinsamer Bücherkatalog (bspw. LibraryThing)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Gemeinsame Bookmarks (bspw. Delicious)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Externe Lehrmaterialien"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Lernprozesse Betreuung",
+    "description": "Die Studierenden werden während der Onlinephasen beim Lernprozess kompetent betreut.",
+    "description_detail": "Es werden folgende Betreuungsformen genützt:",
+    "shorttitle": "3.2",
+    "questiongroups": [
+      {
+        "title": "",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "zeitnahes Feedback und Bewertungen zu Arbeiten der Studierenden"
+          },
+          {
+            "type": "dropdown",
+            "title": "Moderation der Foren (Motivation, Diskussionsleitung, Zusammenfassung, Aufgreifen der Ergebnisse, ...)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Hilfestellung und Verfügbarkeit einer Ansprechstelle bei technischen und inhaltlichen Fragen"
+          },
+          {
+            "type": "dropdown",
+            "title": "Aktive Förderung der Kommunikation und Kooperation durch Motivation und Moderation der Diskussionen durch die Lehrgangsbetreuung"
+          },
+          {
+            "type": "dropdown",
+            "title": "Regelmäßiges Monitoring, ob die Plattform problemlos in der beabsichtigten Weise verwendet wird"
+          },
+          {
+            "type": "dropdown",
+            "title": "individuelles Coaching im persönlichen Lernprozess (E-Coaching)"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Lernprozesse Referenten",
+    "description": "Externe ReferentInnen werden im E-Teachingprozess eingebunden.",
+    "description_detail": "Die ReferentInnen im E-Teachingprozess führen folgende Aktivitäten durch:",
+    "shorttitle": "3.3",
+    "questiongroups": [
+      {
+        "title": "",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Bereitstellen von statischen Inhalten (Skripten, Folien, …)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Bereitstellen von multimedialen bzw. interaktiven Inhalten (Audio, Video, Simulationen, ...)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Formulierung von Aufgabenstellungen"
+          },
+          {
+            "type": "dropdown",
+            "title": "Bereitstellung von Testfragen für (Selbst-)Tests"
+          },
+          {
+            "type": "dropdown",
+            "title": "Bewertung von bzw. Feedback zu Aufgaben und anderen studentischen Arbeiten"
+          },
+          {
+            "type": "dropdown",
+            "title": "Eintragen von Noten"
+          },
+          {
+            "type": "dropdown",
+            "title": "Kommunikation mit den Studierenden während der Onlinephase (z.B. Beteiligung im Forum zur Vorlesung, Chat)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Kommunikation der ReferentInnen untereinander"
+          },
+          {
+            "type": "dropdown",
+            "title": "komplett selbstverantwortliche Gestaltung der E-Learningsequenz"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      },
+      {
+        "title": "Die ReferentInnen haben Unterstützung bekommen:",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Schulungen besucht"
+          },
+          {
+            "type": "dropdown",
+            "title": "Einweisungen erhalten"
+          },
+          {
+            "type": "dropdown",
+            "title": "Informationsmaterialien erhalten"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Kompetenzen",
+    "description": "Die betreuenden Personen (Lehrgangsleitung, Organisationsassistenz, ReferentInnen) verfügen als Team über die nötigen E-Kompetenzen.",
+    "description_detail": "Die betreuenden Personen verfügen als Team (kumulativ) über folgende E-Kompetenzen:",
+    "shorttitle": "4.",
+    "questiongroups": [
+      {
+        "title": "",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Medienkompetenz: Wissen, wie man Materialien und Inhalte webtauglich aufbereitet und in Moodle bereitstellt; Erstellung und Einbindung von Audio- und Videodateien"
+          },
+          {
+            "type": "dropdown",
+            "title": "Moderationskompetenz: Erfahrung mit E-Moderation, mit Besonderheiten der Kommunikation in Foren, Chats und anderen elektronischen Kommunikationswerkzeugen"
+          },
+          {
+            "type": "dropdown",
+            "title": "Erfahrungen mit multifunktionalen Kommunikationswerkzeugen  (Skype, Webkonferenzen, Videokonferenzen, ...)"
+          },
+          {
+            "type": "dropdown",
+            "title": "didaktische Kompetenzen: Konzeption von Lernpfaden, Konzeption von E-Learning-Sequenzen, Formulierung von Aufgabenstellungen, zeitliche Steuerung"
+          },
+          {
+            "type": "dropdown",
+            "title": "Kenntnisse, wie man in Moodle studentische Leistungen bewerten und Feedback geben kann  (Moodle -Bewertungssystem)"
+          },
+          {
+            "type": "dropdown",
+            "title": "Kenntnisse über elementare Kursadministration in Moodle (TeilnehmerInnen zuweisen, Termine eintragen, Inhalte bereitstellen, Evaluierung durchführen, …)"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      },
+      {
+        "title": "Die betreuenden Personen können folgende Referenzen nachweisen:",
+        "questions": [
+          {
+            "type": "dropdown",
+            "title": "Schulungen"
+          },
+          {
+            "type": "dropdown",
+            "title": "Zertifikate"
+          },
+          {
+            "type": "text",
+            "title": "Sonstiges"
+          }
+        ]
+      }
+    ]
+  }
+]

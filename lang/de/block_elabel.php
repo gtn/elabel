@@ -27,4 +27,16 @@ $string['newblock:addinstance'] = 'Add a newblock block';
 $string['newblock:myaddinstance'] = 'Add a newblock block to my moodle';
 $string['pluginname'] = 'E-Learning-Label';
 
-$string['labels'] = 'tab_labels';
+$string['tab_labels'] = 'Label Verwaltung';
+$string['tab_request'] = 'Label Antrag';
+
+$string['title'] = 'Kursname';
+$string['status'] = 'Antragstatus';
+$string['status_new'] = 'Noch kein Antrag vorhanden';
+$string['status_inprogress'] = 'In Arbeit';
+$string['status_requested'] = 'Beantragt';
+$string['status_granted'] = 'Abgeschlossen';
+
+
+
+
