@@ -37,6 +37,6 @@ $string['status_inprogress'] = 'In Arbeit';
 $string['status_requested'] = 'Beantragt';
 $string['status_granted'] = 'Abgeschlossen';
 
-
-
-
+$string['label_none'] = 'kein Label';
+$string['label_advanced'] = 'E-Learning Advanced';
+$string['label_professional'] = 'E-Learning Professional';

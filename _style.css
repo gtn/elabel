@@ -158,7 +158,7 @@ html, body {
 /* -------------- Start Plugin CSS - CSS Implementation erst ab hier ------------------- */
 
 
- .exaLabel-Tabs ul {
+#exaLabel .exaLabel-Tabs ul {
 	list-style: none outside none;
     margin: 0;
     border-collapse: collapse;
@@ -167,7 +167,7 @@ html, body {
     float: left;
 }
 
- .exaLabel-Tabs ul > li {
+#exaLabel .exaLabel-Tabs ul > li {
 	float: left;
 	display: block;
     position: relative;
@@ -175,22 +175,22 @@ html, body {
     border-collapse: collapse;
 }
 
- .exaLabel-Tabs ul > li:last-child {
+#exaLabel .exaLabel-Tabs ul > li:last-child {
     border-right: 1px solid #cacaca;
 }
 
- .exaLabel-Tabs ul > li:first-child {
+#exaLabel .exaLabel-Tabs ul > li:first-child {
     border-left: 1px solid #cacaca;
 }
 
- .exaLabel-Tabs ul > li > a {
+#exaLabel .exaLabel-Tabs ul > li > a {
 	display: block;
     position: relative;
     padding: 10px 8px;
     background-color: #f6f6f6;
 }
 
- .exaLabel-Tabs ul > li > a:after {
+#exaLabel .exaLabel-Tabs ul > li > a:after {
 	content: '»';
 	padding-left: 10px;
 	color: #969696;
@@ -198,11 +198,11 @@ html, body {
 }
 
 
- .exaLabel-Tabs ul > li > a:hover {
+#exaLabel .exaLabel-Tabs ul > li > a:hover {
     background-color: #f6f6f6;
 }
 
- .exaLabel-Tabs ul > li.active > a {
+#exaLabel .exaLabel-Tabs ul > li.active > a {
     background-color: #e2e2e2;
 }
 
@@ -222,11 +222,11 @@ html, body {
 
 /* -------------- UNI Krems ------------------- */
 
- .exaLabel-Tabs ul {
+#exaLabel .exaLabel-Tabs ul {
     border-top: 4px solid #01267f;
 }
 
- .exaLabel-Tabs ul > li > a {
+#exaLabel .exaLabel-Tabs ul > li > a {
 	text-transform: uppercase;
 	background-color: #fff;
 	color: #585858;
@@ -235,7 +235,7 @@ html, body {
 	font-size: 12px;
 }
 
- .exaLabel-Tabs ul > li.active > a,  .exaLabel-Tabs ul > li > a:hover  {
+#exaLabel .exaLabel-Tabs ul > li.active > a, #exaLabel .exaLabel-Tabs ul > li > a:hover  {
     background-color: #e6e5ea;
 }
 
@@ -355,28 +355,28 @@ html, body {
 	color: #01267f;
 }
 
-.exaLabel-Table tbody .exaLabel-evaluation-head td.label_none {
+.exaLabel-Table tbody .exaLabel-evaluation-head td.exa-alert {
 	background-color: #f2dede;
     border-color: #ebccd1;
     color: #a94442;
     font-weight: bold;
 }
 
-.exaLabel-Table tbody .exaLabel-evaluation-head td.label_advanced {
+.exaLabel-Table tbody .exaLabel-evaluation-head td.exa-error {
 	background-color: #fcf8e3;
     border-color: #faebcc;
     color: #8a6d3b;
     font-weight: bold;
 }
 
-.exaLabel-Table tbody .exaLabel-evaluation-head td.label_professional {
+.exaLabel-Table tbody .exaLabel-evaluation-head td.exa-ok {
 	background-color: #dff0d8;
     border-color: #d6e9c6;
     color: #3c763d;
     font-weight: bold;
 }
 
- -Award {
+#exaLabel #exaLabel-Award {
 	margin: 40px auto;
 	max-width: 960px;
 	 border: 1px solid #cacaca;
@@ -385,38 +385,38 @@ html, body {
 	 font-size: 14.5px;
 }
 
- -Award p,  -Award h1 {
+#exaLabel #exaLabel-Award p, #exaLabel #exaLabel-Award h1 {
 	text-align: center;
 }
 
- -Award .exaLabel-AwardLogo,  -Award .exaLabel-AwardLogo img {
+#exaLabel #exaLabel-Award .exaLabel-AwardLogo, #exaLabel #exaLabel-Award .exaLabel-AwardLogo img {
 	width: 140px;
 	margin: 0 auto;
 }
 
- -Award .exaLabel-AwardLabel,  -Award .exaLabel-AwardLabel img {
+#exaLabel #exaLabel-Award .exaLabel-AwardLabel, #exaLabel #exaLabel-Award .exaLabel-AwardLabel img {
 	width: 240px;
 	margin: 0 auto;
 } 
 
- -Award .exaLabel-AwardLogo {
+#exaLabel #exaLabel-Award .exaLabel-AwardLogo {
 	margin-bottom: 30px;
 }
 
- -Award h1 {
+#exaLabel #exaLabel-Award h1 {
 	font-weight: normal;
 	font-size: 38px;
 	margin-bottom: 40px;
 	color: #01267f;
 }
 
- -Award p.exaLabel-Award-Course {
+#exaLabel #exaLabel-Award p.exaLabel-Award-Course {
 	font-weight: bold;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
- -Award .exaLabel-AwardDate {
+#exaLabel #exaLabel-Award .exaLabel-AwardDate {
 	text-align: left;
 }
 

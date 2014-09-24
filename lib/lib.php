@@ -48,6 +48,7 @@ function block_elabel_init_js_css() {
 	$PAGE->requires->js('/blocks/elabel/lib/form.js', true);
 	$PAGE->requires->js('/blocks/elabel/lib/jquery-ui-slider-pips.js',true);
 	$PAGE->requires->css('/blocks/elabel/lib/jquery-ui-slider-pips.css',true);
+	$PAGE->requires->js('/blocks/elabel/lib/Chart.min.js',true);
 }
 /**
  * Build navigation tabs
@@ -108,13 +109,16 @@ function block_elabel_get_page_content($pageid, $requestid) {
 	if($pageid == PAGE_METAINFO)
 		return block_elabel_get_metainfo_page($DB->get_record('block_elabel_request',array('id'=>$requestid)));
 	
+	if($pageid > $DB->count_records('block_elabel_page'))
+		return block_elabel_get_result_page($requestid);
+		
 	return block_elabel_get_evaluation_page($pageid,$requestid);
 }
 
 function block_elabel_get_metainfo_page($data) {
 	global $PAGE;
-	return '<div name="request" id="request" style="clear: both;"></div>
-			<form method="POST" action="'.$PAGE->url.'&pageid=1">
+	return '<div style="clear: both;"></div>
+			<form name="request" id="request" method="POST" action="'.$PAGE->url.'&pageid=1">
 			<input type="hidden" name="formpage" value="0">
 			<table class="exaLabel-Table">
 			<thead>
@@ -291,9 +295,10 @@ Studierendenbefragung  (Monat/Jahr)</td>
 }
 
 function block_elabel_get_evaluation_page($pageid, $requestid) {
-	global $DB,$PAGE;
+	global $DB,$PAGE,$labelconfig;
 	
 	$page = $DB->get_record('block_elabel_page', array('id'=>$pageid));
+	$pageinstance = $DB->get_record('block_elabel_pageinstance', array('requestid'=>$requestid,'pageid'=>$pageid));
 	$question_groups = $DB->get_records('block_elabel_questiongroup',array('pageid'=>$pageid));
 	
 	$answers = $DB->get_records_menu('block_elabel_qinstance',array('requestid'=>$requestid),'','questionid,answer');
@@ -363,8 +368,29 @@ function block_elabel_get_evaluation_page($pageid, $requestid) {
 				}
 				
 			$content .= '
+				<tr>
+					<td class="exalabel-topicev_grad">
+						<div id="pagevaluelabel"></div>
+						
+					</td>
+					<td class="exalabel-topicev_gew">
+						Gewichtung '.$labelconfig->weights[1].' %
+						
+					</td>
+				</tr>
+				<tr class="exalabel-submit">
+					<td class="exalabel-slider"><div id="slider"></div></td>
+					<td class="exalable-right">
+						<div id="min">min: 0</div>
+						<div id="max">max: 22</div>
+						<div id="score"></div>
+						<input type="hidden" id="weightvalue" value="'.$labelconfig->weights[$page->id].'">
+						<input type="hidden" id="pagemultiplier" value="'.$labelconfig->multipliers[$page->id].'">
+						<input type="hidden" name="pagevalue" id="pagevalue" value="'.((isset($pageinstance->value)) ? $pageinstance->value : 0).'">
+					</td>
+				</tr>
 			<tr class="exalabel-submit">
-					<td><div id="slider"></div></td>
+					<td></td>
 					<td class="exalable-right"><input type="submit" value="Weiter"></td>
 				</tr>
 			</tbody>
@@ -381,6 +407,13 @@ function block_elabel_get_questions_for_page($pageid) {
 }
 function block_elabel_save_formdata($data, &$requestid, $courseid) {
 	global $USER, $DB;
+
+	if($data['formpage'] > 0 && $data['formpage'] < 8) {
+		$pageinstance = $DB->delete_records('block_elabel_pageinstance', array('requestid'=>$requestid,'pageid'=>$data['formpage']));
+		$DB->insert_record('block_elabel_pageinstance', array('requestid'=>$requestid,'pageid'=>$data['formpage'],'userid'=>$USER->id,'value'=>$data['pagevalue']));
+	}
+	unset($data['pagevalue']);
+	
 	$request = $DB->get_record('block_elabel_request',array('id'=>$requestid));
 	if($data['formpage'] == 0 && !$request) {
 		$data['courseid'] = $courseid;
@@ -397,6 +430,7 @@ function block_elabel_save_formdata($data, &$requestid, $courseid) {
 		$DB->update_record('block_elabel_request', $request);	
 		return;
 	}
+	
 	unset($data['formpage']);
 	foreach($data as $id => $answer) {
 		$DB->delete_records('block_elabel_qinstance',array('userid' => $USER->id, 'requestid' => $requestid, 'questionid' => $id));
@@ -404,4 +438,118 @@ function block_elabel_save_formdata($data, &$requestid, $courseid) {
 	}
 	
 	return;
+}
+
+function block_elabel_get_result_page($requestid) {
+	global $DB,$labelconfig;
+	$records = $DB->get_records('block_elabel_pageinstance',array('requestid'=>$requestid),'pageid');
+	$total = 0;
+	foreach($records as $record)
+		$total += ($record->value * $labelconfig->weights[$record->pageid] / 100);
+	
+	$content = '
+		<div style="clear: both;"></div>
+		<table class="exaLabel-Table">
+			<thead>
+				<tr>
+					<th colspan="3">
+					
+						<table class="exaLabel-Table-Head">
+							<tr>
+								<th class="exHeFi">E-Learning Label</th>
+								<th class="exHeSe"><h1>Auswertung</h1></th>
+								<th class="exHeTh"><img src="pix/duk_logo_00.png" alt=""></th>
+							</tr>
+						</table>
+					</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				';
+			if($total >= $labelconfig->labelprofessional)
+				$class = "label_professional";
+			elseif($total >= $labelconfig->labeladvanced)
+				$class = "label_advanced";
+			else
+				$class = "label_none";
+			$content .='
+				<tr class="exaLabel-evaluation-head">
+					<td>erreichtes Label:</td>
+					<td class="'.$class.'">'.get_string($class,'block_elabel').'</td>
+					<td>Punkte: '.round($total).'</td>
+				</tr>';
+				
+				$content .= '
+				<tr>
+					<td colspan="3">
+						<div style="width: 80%"><canvas id="canvas"></canvas></div>
+						<div style="width: 20%"><canvas width="50" id="bar_canvas"></canvas>	</div>					
+					</td>
+				</tr>
+				
+				
+				<tr class="exalabel-submit">
+					<td><input type="submit" value="Zurück"></td>
+					<td></td>
+					<td class="exalable-right"><input type="submit" value="Weiter"></td>
+				</tr>
+			
+			</tbody>
+		</table>
+				
+				<script>
+					var radarChartData = {
+						labels: [';
+						
+							foreach($DB->get_records('block_elabel_page',null,'id') as $page) {
+								$content .= '"' . $page->shorttitle . ' ' . $page->title . '(' . $labelconfig->weights[$page->id] .'%)",';
+							}
+						
+						$content .= '],
+						datasets: [
+							{
+								label: "Auswertung",
+								fillColor: "rgba(151,187,205,0.2)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								pointHighlightFill: "#fff",
+								pointHighlightStroke: "rgba(151,187,205,1)",
+								data: [';
+									foreach($records as $pageinstance) {
+										$content .= $pageinstance->value . ', ';
+									}
+								$content .= '	
+								]
+							}
+						]
+					};
+				
+								var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+
+	var barChartData = {
+		labels : ["January"],
+		datasets : [
+			{
+				fillColor : "rgba(151,187,205,0.5)",
+				strokeColor : "rgba(151,187,205,0.8)",
+				highlightFill : "rgba(151,187,205,0.75)",
+				highlightStroke : "rgba(151,187,205,1)",
+				data : [randomScalingFactor()]
+			}
+		]
+
+	}
+	window.onload = function(){
+	window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
+							responsive: true
+						});
+		var ctx = document.getElementById("bar_canvas").getContext("2d");
+		window.myBar = new Chart(ctx).Bar(barChartData, {
+			responsive : true
+		});
+	}</script>';
+	
+	return $content;
 }
