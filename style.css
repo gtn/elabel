@@ -191,7 +191,7 @@ html, body {
 }
 
  .exaLabel-Tabs ul > li > a:after {
-	content: '»';
+	content: '>';
 	padding-left: 10px;
 	color: #969696;
 	font-weight: normal;
@@ -459,3 +459,29 @@ table.exaLabel-AwardDate td {
 	padding-top: 8px;
 	clear: both;
 } 
+.radargraph {
+width: 85%;
+float: left;
+box-sizing: border-box;
+display: block;
+}
+.bargraph {
+width: 15%;
+float: left;
+box-sizing: border-box;
+display: block;
+}
+.infotext {
+	text-align: center;
+width: 70%;
+float: left;
+box-sizing: border-box;
+display: block;
+}
+.submitbutton {
+	text-align: center;
+width: 30%;
+float: left;
+box-sizing: border-box;
+display: block;
+}

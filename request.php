@@ -35,11 +35,30 @@ if (!$course = $DB->get_record('course', array('id' => $courseid))) {
 }
 
 require_login($courseid);
-
+$request = $DB->get_record('block_elabel_request', array('id'=>$requestid));
 $context = context_course::instance($courseid);
-require_capability('block/elabel:use', $context);
 
-if($_POST) {
+$editable = false;
+$audit = false;
+//check permissions
+if(!$request || $request->state < STATUS_REQUESTED) {
+	//check if i am a teacher in the requested course
+	require_capability('block/elabel:audit', context_course::instance($labelcourseid));
+	//check if i am a student in the current course
+	require_capability('block/elabel:use', $context);
+	
+	if($request && $request->userid != $USER->id)
+		die;
+	
+	$editable = true;
+} else if($request && $request->state == STATUS_REQUESTED && has_capability('block/elabel:audit', $context)) {
+	//to review the request i need to be a teacher in the current course
+	
+	$editable = true;
+	$audit = true;
+}
+
+if($_POST && $editable) {
 	block_elabel_save_formdata($_POST,$requestid,$labelcourseid);
 }
 $page_identifier = 'tab_request';
@@ -51,18 +70,23 @@ block_elabel_init_js_css();
 
 // build breadcrumbs navigation
 $coursenode = $PAGE->navigation->find($COURSE->id, navigation_node::TYPE_COURSE);
-$blocknode = $coursenode->add(get_string('pluginname','block_elabel'));
+$blocknode = $coursenode->add(get_string('pluginname','block_elabel'), new moodle_url('/blocks/elabel/labels.php',array('courseid'=>$courseid)));
 $pagenode = $blocknode->add(get_string($page_identifier,'block_elabel'), $PAGE->url);
 $pagenode->make_active();
 
-/* CONTENT REGION */
 echo $OUTPUT->header();
 
 // build navigation
-echo block_elabel_get_navigation($pageid);
-echo block_elabel_get_page_content($pageid,$requestid);
+echo block_elabel_get_navigation($pageid,$audit);
+echo block_elabel_get_page_content($pageid,$request);
 
-/* END CONTENT REGION */
+//DISABLE FORM IF REQUEST REQUESTED
+if(!$editable) {
+	echo '
+	<script type="text/javascript">
+		$(":input").prop("disabled", true);
+	</script>';
+}
 
 echo $OUTPUT->footer();
 

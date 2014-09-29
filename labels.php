@@ -31,6 +31,7 @@ require_once $CFG->libdir . "/tablelib.php";
 $courseid = required_param('courseid', PARAM_INT);
 $sorting = optional_param('sorting', 'id', PARAM_TEXT);
 $sorttype = optional_param('type', 'asc', PARAM_TEXT);
+$action = optional_param('action','',PARAM_TEXT);
 
 if (!$course = $DB->get_record('course', array('id' => $courseid))) {
 	print_error('invalidcourse', 'block_simplehtml', $courseid);
@@ -58,6 +59,10 @@ echo $OUTPUT->header();
 echo $OUTPUT->tabtree(block_elabel_build_navigation_tabs($courseid), $page_identifier);
 
 /* CONTENT REGION */
+if($action == 'submit') {
+	$requestid = required_param('requestid', PARAM_INT);
+	block_elabel_submit_request($requestid);
+}
 $table = new html_table();
 
 $table->head = array(html_writer::link($PAGE->url . "&sorting=title", get_string('title','block_elabel')),
@@ -65,7 +70,10 @@ $table->head = array(html_writer::link($PAGE->url . "&sorting=title", get_string
 		'');
 
 $data = block_elabel_get_my_courses();
-$status = array(STATUS_NEW => get_string('status_new','block_elabel'),STATUS_INPROGRESS => get_string('status_inprogress','block_elabel'),STATUS_REQUESTED => get_string('status_requested','block_elabel'),STATUS_GRANTED => get_string('status_granted','block_elabel'));
+$status = array(STATUS_NEW => get_string('status_new','block_elabel'),
+		STATUS_INPROGRESS => get_string('status_inprogress','block_elabel'),
+		STATUS_REQUESTED => get_string('status_requested','block_elabel'),
+		STATUS_GRANTED => get_string('status_granted','block_elabel'));
 
 foreach($data as &$record) {
 	$record['status'] = $status[$record['status']];

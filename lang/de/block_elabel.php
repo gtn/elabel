@@ -40,3 +40,6 @@ $string['status_granted'] = 'Abgeschlossen';
 $string['label_none'] = 'kein Label';
 $string['label_advanced'] = 'E-Learning Advanced';
 $string['label_professional'] = 'E-Learning Professional';
+
+$string['infotext'] = 'Ich bin mit dem Ergebnis zufrieden und möchte den Antrag endgültig absenden. Danach kann ich keine Änderungen mehr vornehmen.';
+$string['inforequested'] = 'Der Antrag wurde bereits zur Einsichtnahme eingereicht und es sind keine Änderungen mehr möglich.';

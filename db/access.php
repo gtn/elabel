@@ -56,7 +56,28 @@ $capabilities = array(
 						'coursecreator' => CAP_ALLOW,
 						'editingteacher' => CAP_ALLOW,
 						'teacher' => CAP_ALLOW,
+						'manager' => CAP_ALLOW,
+						'user' => CAP_ALLOW
+				)
+		),
+		'block/elabel:request' => array(
+				'captype' => 'write',
+				'contextlevel' => CONTEXT_COURSE,
+				'legacy' => array(
+						'coursecreator' => CAP_ALLOW,
+						'editingteacher' => CAP_ALLOW,
+						'teacher' => CAP_ALLOW,
 						'manager' => CAP_ALLOW
 				)
 		),
+		'block/elabel:audit' => array(
+				'captype' => 'write',
+				'contextlevel' => CONTEXT_COURSE,
+				'legacy' => array(
+						'coursecreator' => CAP_ALLOW,
+						'editingteacher' => CAP_ALLOW,
+						'teacher' => CAP_ALLOW,
+						'manager' => CAP_ALLOW
+				)
+		)
 );
