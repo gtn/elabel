@@ -129,6 +129,7 @@ div.c1 {
 </html>';
 
 echo $html;die;
+/*
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -153,4 +154,4 @@ $pdf->writeHTML('
 			<p>Jhg WS2015 SKZ 123</p>
 			<p>wird stattgegeben</p>');
 
-$pdf->Output('label.pdf');
+$pdf->Output('label.pdf');*/

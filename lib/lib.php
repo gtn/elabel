@@ -56,9 +56,12 @@ function block_elabel_init_js_css() {
  * Build navigation tabs
  */
 function block_elabel_build_navigation_tabs($courseid) {
-
 	return array();
 }
+/**
+ * Is used to fetch all requests and display them to a course teacher
+ * @param String $sorting
+ */
 function block_elabel_get_all_requests($sorting = 'id') {
 	global $DB;
 	
@@ -78,12 +81,16 @@ function block_elabel_get_all_requests($sorting = 'id') {
 	
 	return $data;
 }
+/**
+ * Is used to fetch all user courses he is a teacher in and he can request a label for
+ */
 function block_elabel_get_my_courses() {
 	global $DB, $USER;
 	
 	$courses = enrol_get_my_courses();
 	$data = array();
 	foreach($courses as $course) {
+		//skip course if the is not a teacher
 		if(!has_capability('block/elabel:audit', context_course::instance($course->id), $USER)) {
 			unset($course);
 			continue;
@@ -112,7 +119,12 @@ function block_elabel_get_my_courses() {
 	
 	return $data;
 }
-
+/**
+ * Builds navigation in the form
+ * @param int $pageid
+ * @param boolean $audit
+ * @param boolean $pdf
+ */
 function block_elabel_get_navigation($pageid, $audit = false, $pdf = false) {
 	global $DB,$PAGE;
 	
@@ -135,7 +147,6 @@ function block_elabel_get_navigation($pageid, $audit = false, $pdf = false) {
 			
 	return $menu;
 }
-
 function block_elabel_get_page_content($pageid, $request) {
 	global $DB;
 	if($pageid == PAGE_METAINFO)
@@ -152,6 +163,13 @@ function block_elabel_get_page_content($pageid, $request) {
 		
 	return block_elabel_get_evaluation_page($pageid,$request);
 }
+/**
+ * Get faculty, department and center information from course categories.
+ * top level = faculty
+ * 2nd level = department
+ * 3rd level = center
+ * @param int $courseid
+ */
 function block_elabel_get_coursecat_infos($courseid) {
 	global $DB;
 	$i=0;
@@ -171,6 +189,9 @@ function block_elabel_get_coursecat_infos($courseid) {
 	}
 	return array($faculty,@$department,@$center);
 }
+/**
+ * Prints first form page
+ */
 function block_elabel_get_metainfo_page($data) {
 	global $DB,$PAGE,$USER;
 
@@ -182,21 +203,8 @@ function block_elabel_get_metainfo_page($data) {
 		$data->center = '';
 		
 		$courseid = required_param('labelcourseid', PARAM_INT);
-		$i=0;
-		$context = context_course::instance($courseid);
-		foreach(array_reverse($context->get_parent_contexts()) as $parentcontext) {
-			if($parentcontext->contextlevel == CONTEXT_COURSECAT) {
-				$cat = $DB->get_record('course_categories',array('id'=>$parentcontext->instanceid));
-				if($i == 0)
-					$data->faculty = $cat->name;
-				if($i == 1)
-					$data->department = $cat->name;
-				if($i == 2)
-					$data->center = $cat->name;
-				$i++;
-			}
-		}
-		
+		list($data->faculty,$data->department,$data->center) = block_elabel_get_coursecat_infos($courseid);
+
 		$data->coursename = $DB->get_record('course',array('id' => $courseid))->fullname;
 		$data->coursenumber = '';
 		$data->internalnumber = '';
@@ -346,7 +354,7 @@ function block_elabel_get_metainfo_page($data) {
 				
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Lehrgangsabschlusstermin für 
-Studierendenbefragung  (Monat/Jahr)</td>
+						Studierendenbefragung  (Monat/Jahr)</td>
 					<td>
 						<input id="" class="" type="text" value="'.$data->survey.'" name="survey">
 					</td>
@@ -421,7 +429,12 @@ Studierendenbefragung  (Monat/Jahr)</td>
 		</table>
 		</form>';
 }
-
+/**
+ * Builds evaluation form pages, based on the questions and questiongroups in the database
+ * 
+ * @param int $pageid
+ * @param object $request
+ */
 function block_elabel_get_evaluation_page($pageid, $request) {
 	global $DB,$PAGE,$labelconfig;
 	
@@ -449,15 +462,12 @@ function block_elabel_get_evaluation_page($pageid, $request) {
 					</th>
 				</tr>
 			</thead>
-			
 			<tbody>
-				
 				<tr>
 					<td class="exaLabel-Description-head" colspan="2"><h2>'.$page->shorttitle . ' ' . $page->title .'</h2>
 					<p>'.$page->description.'</p>
 					</td>
 				</tr>
-				
 				<tr>
 					<td class="exaLabel-Description" colspan="2">'.$page->description_detail.'</td>
 				</tr>';
@@ -499,11 +509,9 @@ function block_elabel_get_evaluation_page($pageid, $request) {
 				<tr>
 					<td class="exalabel-topicev_grad">
 						<div id="pagevaluelabel"></div>
-						
 					</td>
 					<td class="exalabel-topicev_gew">
 						Gewichtung '.$labelconfig->weights[$page->id].' %
-						
 					</td>
 				</tr>
 				<tr class="exalabel-submit">
@@ -622,7 +630,7 @@ function block_elabel_get_result_page($request) {
 			</thead>
 			
 			<tbody>
-				';
+			';
 			if($total >= $labelconfig->labelprofessional)
 				$class = "label_professional";
 			elseif($total >= $labelconfig->labeladvanced)
@@ -654,8 +662,8 @@ function block_elabel_get_result_page($request) {
 					$content .= '</td>
 				</tr>
 			
-			</tbody>
-		</table>
+				</tbody>
+			</table>
 		</form>		
 				<script>
 					var radarChartData = {
@@ -685,8 +693,6 @@ function block_elabel_get_result_page($request) {
 						]
 					};
 				
-					var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-
 					var barChartData = {
 						labels : [""],
 						datasets : [
@@ -708,10 +714,14 @@ function block_elabel_get_result_page($request) {
 					window.myBar = new Chart(ctx).Bar(barChartData, {
 						responsive : true
 					});
-	}</script>';
+				}</script>';
 	
 	return $content;
 }
+/**
+ * Submit a request, set the state to REQUESTED and notify course teachers via mail
+ * @param int $requestid
+ */
 function block_elabel_submit_request($requestid) {
 	global $CFG,$COURSE,$DB,$USER;
 	$request = $DB->get_record('block_elabel_request',array('id'=>$requestid));

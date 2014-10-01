@@ -49,10 +49,7 @@ class block_elabel extends block_list {
 
 		$this->content->items[] = html_writer::link(new moodle_url('/blocks/elabel/labels.php', array('courseid'=>$COURSE->id)), get_string('tab_labels', 'block_elabel'), array('title'=>get_string('tab_labels', 'block_elabel')));
 		$this->content->icons[] = html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/elabel/pix/reminders.png'), 'alt'=>"", 'height'=>16, 'width'=>23));
-		/*
-		$this->content->items[] = html_writer::link(new moodle_url('/blocks/elabel/new_reminder.php', array('courseid'=>$COURSE->id)), get_string('tab_new_reminder', 'block_elabel'), array('title'=>get_string('tab_new_reminder', 'block_elabel')));
-		$this->content->icons[] = html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/elabel/pix/new.png'), 'alt'=>"", 'height'=>16, 'width'=>23));
-		*/
+
 		return $this->content;
 	}
 
