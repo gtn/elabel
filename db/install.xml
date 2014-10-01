@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/elabel/db" VERSION="20140929" COMMENT="XMLDB file for Moodle blocks/elabel"
+<XMLDB PATH="blocks/elabel/db" VERSION="20140930" COMMENT="XMLDB file for Moodle blocks/elabel"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -25,10 +25,10 @@
         <FIELD NAME="coursenumber" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="year" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="completiontype" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="master / akad. expertin / certified program"/>
-        <FIELD NAME="ects" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="lessons" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="days" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="semester" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="ects" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lessons" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="days" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="semester" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="survey" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="survey deadline"/>
         <FIELD NAME="urldescription" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="urlmoodle" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
@@ -119,6 +119,7 @@
         <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="protocol" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="requestid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

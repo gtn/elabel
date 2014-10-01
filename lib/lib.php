@@ -30,6 +30,7 @@ define('STATUS_GRANTED',2);
 define('PAGE_METAINFO',0);
 define('PAGE_RESULT', 100);
 define('PAGE_AUDIT',200);
+define('PAGE_PDF',250);
 
 define('QUESTION_TYPE_DROPDOWN',0);
 define('QUESTION_TYPE_TEXT',1);
@@ -56,12 +57,27 @@ function block_elabel_init_js_css() {
  */
 function block_elabel_build_navigation_tabs($courseid) {
 
-	//$rows[] = new tabobject('tab_course_reminders', new moodle_url('/blocks/elabel/course_reminders.php',array("courseid"=>$courseid)),get_string('tab_course_reminders','block_elabel'));
-	//$rows[] = new tabobject('tab_new_reminder', new moodle_url('/blocks/elabel/new_reminder.php',array("courseid"=>$courseid)),get_string('tab_new_reminder','block_elabel'));
 	return array();
-	return $rows;
 }
-
+function block_elabel_get_all_requests($sorting = 'id') {
+	global $DB;
+	
+	$data = array();
+	$requests = $DB->get_records('block_elabel_request',null,$sorting);
+	foreach($requests as $request) {
+		$data[] = array(
+				'title' => $request->coursename,
+				'faculty' => $request->faculty,
+				'user' => $request->username,
+				'status' => $request->state,
+				'requestid' => $request->id,
+				'courseid' => $request->courseid,
+				'timecreated' => ($request->timecreated) ? date("d.m.Y",$request->timecreated) : '',
+				'timegranted' => ($request->timegranted) ? date("d.m.Y",$request->timegranted) : '');
+	}
+	
+	return $data;
+}
 function block_elabel_get_my_courses() {
 	global $DB, $USER;
 	
@@ -81,14 +97,23 @@ function block_elabel_get_my_courses() {
 		else {
 			$course->status = $request->state;
 			$course->requestid = $request->id;
+			
 		}
-		$data[] = array('title'=>$course->fullname, 'status'=>$course->status,'requestid'=>$course->requestid,'courseid'=>$course->id);
+		list($faculty,$department,$center) = block_elabel_get_coursecat_infos($course->id);
+		$data[] = array('title'=>$course->fullname,
+				'faculty' => $faculty,
+				'user' => fullname($USER),
+				'status'=>$course->status,
+				'requestid'=>$course->requestid,
+				'courseid'=>$course->id,
+				'timecreated'=>(isset($request->timecreated) ? date("d.m.Y",$request->timecreated) : ''),
+				'timegranted'=>(isset($request->timegranted) ? date("d.m.Y",$request->timegranted) : ''));
 	}
 	
 	return $data;
 }
 
-function block_elabel_get_navigation($pageid, $audit = false) {
+function block_elabel_get_navigation($pageid, $audit = false, $pdf = false) {
 	global $DB,$PAGE;
 	
 	$menu = '
@@ -100,9 +125,10 @@ function block_elabel_get_navigation($pageid, $audit = false) {
 				$menu .= '<li'.(($pageid == $page->id) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.$page->id.'">'.$page->shorttitle.'</a></li>';
 			
 			$menu .= '<li'.(($pageid == PAGE_RESULT) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_RESULT.'">Auswertung</a></li>';
-			if($audit) {
+			if($audit) 
 				$menu .= '<li'.(($pageid == PAGE_AUDIT) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_AUDIT.'">Audit</a></li>';
-			}
+			if($pdf)
+				$menu .= '<li'.(($pageid == PAGE_PDF) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_PDF.'">Label (PDF)</a></li>';
 		$menu .= '
 		</ul>
 	</div>';
@@ -118,22 +144,62 @@ function block_elabel_get_page_content($pageid, $request) {
 	if($pageid == PAGE_AUDIT)
 		return block_elabel_get_audit_page($request);
 	
+	if($pageid == PAGE_PDF)
+		redirect(new moodle_url('label.php?request='.$request->id));
+	
 	if($pageid > $DB->count_records('block_elabel_page'))
 		return block_elabel_get_result_page($request);
 		
 	return block_elabel_get_evaluation_page($pageid,$request);
 }
-
+function block_elabel_get_coursecat_infos($courseid) {
+	global $DB;
+	$i=0;
+	$context = context_course::instance($courseid);
+	foreach(array_reverse($context->get_parent_contexts()) as $parentcontext) {
+		if($parentcontext->contextlevel == CONTEXT_COURSECAT) {
+			$cat = $DB->get_record('course_categories',array('id'=>$parentcontext->instanceid));
+			if($i == 0)
+				$faculty = $cat->name;
+			if($i == 1)
+				$department = $cat->name;
+			if($i == 2)
+				$center = $cat->name;
+			
+			$i++;
+		}
+	}
+	return array($faculty,@$department,@$center);
+}
 function block_elabel_get_metainfo_page($data) {
-	global $PAGE;
+	global $DB,$PAGE,$USER;
 
 	if(!$data) {
 		$data = new stdClass();
+		
 		$data->faculty = '';
 		$data->department = '';
 		$data->center = '';
-		$data->coursename = '';
+		
+		$courseid = required_param('labelcourseid', PARAM_INT);
+		$i=0;
+		$context = context_course::instance($courseid);
+		foreach(array_reverse($context->get_parent_contexts()) as $parentcontext) {
+			if($parentcontext->contextlevel == CONTEXT_COURSECAT) {
+				$cat = $DB->get_record('course_categories',array('id'=>$parentcontext->instanceid));
+				if($i == 0)
+					$data->faculty = $cat->name;
+				if($i == 1)
+					$data->department = $cat->name;
+				if($i == 2)
+					$data->center = $cat->name;
+				$i++;
+			}
+		}
+		
+		$data->coursename = $DB->get_record('course',array('id' => $courseid))->fullname;
 		$data->coursenumber = '';
+		$data->internalnumber = '';
 		$data->completiontype = '';
 		$data->ects = '';
 		$data->lessons = '';
@@ -143,13 +209,13 @@ function block_elabel_get_metainfo_page($data) {
 		$data->urldescription = '';
 		$data->urlmoodle = '';
 		$data->other = '';
-		$data->username = '';
+		$data->username = fullname($USER);
 		$data->courseteacher = '';
 		$data->coursehead = '';
 		$data->departmenthead = '';
 		$data->year = '';
 		$data->departmentnotification = false;
-		$data->timecreated = '';
+		$data->timecreated = time();
 	}
 	return '<div style="clear: both;"></div>
 			<form name="request" id="request" method="POST" action="'.$PAGE->url.'&pageid=1">
@@ -179,21 +245,21 @@ function block_elabel_get_metainfo_page($data) {
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Fakultät</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->faculty.'" name="faculty">
+						<input id="" class="" type="text" value="'.$data->faculty.'" name="faculty" readonly>
 					</td>
 				</tr>
 				
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Department</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->department.'" name="department">
+						<input id="" class="" type="text" value="'.$data->department.'" name="department" readonly>
 					</td>
 				</tr>
 				
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Zentrum</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->center.'" name="center">
+						<input id="" class="" type="text" value="'.$data->center.'" name="center" readonly>
 					</td>
 				</tr>
 				
@@ -204,7 +270,7 @@ function block_elabel_get_metainfo_page($data) {
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Lehrgangsbezeichnung</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->coursename.'" name="coursename">
+						<input id="" class="" type="text" value="'.$data->coursename.'" name="coursename" readonly>
 					</td>
 				</tr>
 				
@@ -218,14 +284,35 @@ function block_elabel_get_metainfo_page($data) {
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Jahrgang (Start)</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->year.'" name="coursenumber">
+						<select name="year">
+							<option value="WS2013" ' . ((($data->year) == "WS2013") ? ' selected ' : '') .'>WS2013</option>
+							<option value="SS2014" ' . ((($data->year) == "SS2014") ? ' selected ' : '') .'>SS2014</option>
+							<option value="WS2014" ' . ((($data->year) == "WS2014") ? ' selected ' : '') .'>WS2014</option>
+							<option value="SS2015" ' . ((($data->year) == "SS2015") ? ' selected ' : '') .'>SS2015</option>
+							<option value="WS2015" ' . ((($data->year) == "WS2015") ? ' selected ' : '') .'>WS2015</option>
+							<option value="SS2016" ' . ((($data->year) == "SS2016") ? ' selected ' : '') .'>SS2016</option>
+							<option value="WS2016" ' . ((($data->year) == "WS2016") ? ' selected ' : '') .'>WS2016</option>
+							<option value="SS2017" ' . ((($data->year) == "SS2017") ? ' selected ' : '') .'>SS2017</option>
+							<option value="WS2017" ' . ((($data->year) == "WS2017") ? ' selected ' : '') .'>WS2017</option>
+						</select>
+					</td>
+				</tr>
+				
+				<tr class="exalabel-Angaben">
+					<td class="exalabel-row-right">Nummer oder interne Bezeichnung (optional)</td>
+					<td>
+						<input id="" class="" type="text" value="'.$data->internalnumber.'" name="internalnumber">
 					</td>
 				</tr>
 				
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Lehrgangsabschluss</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->completiontype.'" name="completiontype">
+						<select name="completiontype">
+							<option value="Master" ' . ((($data->completiontype) == "Master") ? ' selected ' : '') .'>Master</option>
+							<option value="Akademische/r Expertin" ' . ((($data->completiontype) == "Akademische/r Expertin") ? ' selected ' : '') .'>Akademische/r Expertin</option>
+							<option value="Certified Program" ' . ((($data->completiontype) == "Certified Program") ? ' selected ' : '') .'>Certified Program</option>
+						</select>
 					</td>
 				</tr>
 				
@@ -323,7 +410,7 @@ Studierendenbefragung  (Monat/Jahr)</td>
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Datum der Einreichung</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->timecreated.'" name="timecreated">
+						<input id="" class="" type="text" value="'.(date("d.m.Y",$data->timecreated)).'" name="timecreated" disabled>
 					</td>
 				</tr>
 				<tr class="exalabel-submit">
@@ -415,7 +502,7 @@ function block_elabel_get_evaluation_page($pageid, $request) {
 						
 					</td>
 					<td class="exalabel-topicev_gew">
-						Gewichtung '.$labelconfig->weights[1].' %
+						Gewichtung '.$labelconfig->weights[$page->id].' %
 						
 					</td>
 				</tr>
@@ -447,7 +534,7 @@ function block_elabel_get_questions_for_page($pageid) {
 	return $questions;
 }
 function block_elabel_save_formdata($data, &$requestid, $courseid) {
-	global $USER, $DB;
+	global $USER, $DB, $CFG;
 	if(!isset($data['formpage']))
 		$data['formpage'] = 0;
 	
@@ -463,6 +550,7 @@ function block_elabel_save_formdata($data, &$requestid, $courseid) {
 		$data['userid'] = $USER->id;
 		$data['timecreated'] = time();
 		
+		$DB->delete_records('block_elabel_request',array('courseid'=>$courseid));
 		$requestid = $DB->insert_record('block_elabel_request', $data);
 		return;
 	} elseif($data['formpage'] == 0) {
@@ -472,6 +560,22 @@ function block_elabel_save_formdata($data, &$requestid, $courseid) {
 		$request->timemodified = time();
 		$request->modifiedby = $USER->id;
 		$DB->update_record('block_elabel_request', $request);	
+		return;
+	} elseif($data['formpage'] == PAGE_AUDIT) {
+		$data['requestid'] = $requestid;
+		$DB->delete_records('block_elabel_audit',array('requestid'=>$requestid));
+		$DB->insert_record('block_elabel_audit', $data);
+		
+		if($request->state == STATUS_REQUESTED) {
+			$request->state = STATUS_GRANTED;
+			$request->timegranted = time();
+			
+			$textParams = new stdClass();
+			$textParams->coursename = $request->coursename;
+			$textParams->label = $CFG->wwwroot.'/blocks/elabel/label.php?request='.$request->id;
+			email_to_user($DB->get_record('user', array('id'=>$request->userid)), $USER, get_string('pluginname','block_elabel'), get_string('request_granted','block_elabel',$textParams));
+			$DB->update_record('block_elabel_request', $request);
+		}
 		return;
 	}
 	
@@ -542,10 +646,12 @@ function block_elabel_get_result_page($request) {
 				
 				
 				<tr>
-					<td colspan="3">
-						<div class="infotext">'.(($request->state < STATUS_REQUESTED) ? get_string('infotext','block_elabel') : get_string('inforequested','block_elabel')).'</div>
-						<div class="submitbutton"><input type="submit" value="Antrag absenden"></div>
-					</td>
+					<td colspan="3">';
+						if(!has_capability('block/elabel:audit', context_course::instance($COURSE->id)))
+							$content .= '
+								<div class="infotext">'.(($request->state < STATUS_REQUESTED) ? get_string('infotext','block_elabel') : get_string('inforequested','block_elabel')).'</div>
+								<div class="submitbutton"><input type="submit" value="Antrag absenden"></div>';
+					$content .= '</td>
 				</tr>
 			
 			</tbody>
@@ -607,16 +713,27 @@ function block_elabel_get_result_page($request) {
 	return $content;
 }
 function block_elabel_submit_request($requestid) {
-	global $DB;
+	global $CFG,$COURSE,$DB,$USER;
 	$request = $DB->get_record('block_elabel_request',array('id'=>$requestid));
 	$request->state = STATUS_REQUESTED;
 	$request->timesubmitted = time();
 	
 	$DB->update_record('block_elabel_request', $request);
 	//write email notification to course teachers
+	$teachers = block_elabel_get_course_teachers(context_course::instance($request->courseid));
+	$textParams = new stdClass();
+	$textParams->username = $request->username;
+	$textParams->coursename = $request->coursename;
+	$textParams->form = $CFG->wwwroot . '/blocks/elabel/request.php?courseid=' . $COURSE->id .'&labelcourseid='.$request->courseid.'&requestid='.$request->id;
+	foreach($teachers as $teacher) {
+		email_to_user($teacher, $USER, get_string('pluginname','block_elabel'), get_string('request_sent','block_elabel',$textParams));
+	}
+}
+function block_elabel_get_course_teachers($coursecontext) {
+	return array_merge(get_role_users(4, $coursecontext),get_role_users(3, $coursecontext),get_role_users(2, $coursecontext),get_role_users(1, $coursecontext));
 }
 function block_elabel_get_audit_page($request) {
-	global $DB,$labelconfig;
+	global $DB,$labelconfig,$PAGE;
 	
 	$total = block_elabel_get_score_for_request($request);
 	
@@ -627,14 +744,21 @@ function block_elabel_get_audit_page($request) {
 	else
 		$class = "label_none";
 	
+	$audit = $DB->get_record('block_elabel_audit',array('requestid'=>$request->id));
+	
+	if(!isset($audit->timecreated)) {
+		$audit = new stdClass();
+		$audit->timecreated = time();
+	}
+	
 	return 
 	'
+	<form name="request" id="request" method="POST" action="'.$PAGE->url.'&pageid='.PAGE_AUDIT.'">
 	<div style="clear: both;"></div>
 		<table class="exaLabel-Table">
 			<thead>
 				<tr>
 					<th colspan="2">
-					
 						<table class="exaLabel-Table-Head">
 							<tr>
 								<th class="exHeFi">E-Learning Label</th>
@@ -659,7 +783,7 @@ function block_elabel_get_audit_page($request) {
 				<tr class="exalabel-Angaben-Audit">
 					<td class="exalabel-row-right">Gültig ab:</td>
 					<td>
-						'.$request->timecreated.'
+						'.date("d.m.Y",$request->timecreated).'
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben-Audit">
@@ -683,9 +807,7 @@ function block_elabel_get_audit_page($request) {
 				<tr class="exalabel-Angaben-Audit">
 					<td class="exalabel-row-right">Antragsvoraussetzung:</td>
 					<td>
-						<select name="requirement">
-							<option value="'.SELECT_NONE.'" ' . ((!isset($audit['requirement']) || $audit['requirement'] == SELECT_NONE) ? ' selected ' : '') .'>erfüllt</option>
-						</select>
+						<input type="text" name="requirement" value="'.(isset($audit->requirement) ? $audit->requirement : '').'"/>
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben-Audit">
@@ -703,7 +825,7 @@ function block_elabel_get_audit_page($request) {
 				<tr class="exalabel-Angaben-Audit">
 					<td class="exalabel-row-right">Nummer od. interne Bezeichnung:</td>
 					<td>
-						0
+						'.$request->internalnumber.'
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben-Audit">
@@ -723,49 +845,54 @@ function block_elabel_get_audit_page($request) {
 				<tr>
 					<td class="exalabel-row25">Anmerkungen:</td>
 					<td>
-						<input type="text" name="note"/>
+						<input type="text" name="note" value="'.(isset($audit->note) ? $audit->note : '').'"/>
 					</td>
 				</tr>
 				<tr>
 					<td class="exalabel-row25">Evaluation:</td>
 					<td>
-						<textarea name="evaluation" rows="4" cols="50">'.((isset($audit['evaluation'])) ? $audit['evaluation'] : '').'</textarea>
+						<textarea name="evaluation" rows="4" cols="50">'.((isset($audit->evaluation)) ? $audit->evaluation : '').'</textarea>
 					</td>
 				</tr>
 				<tr>
 					<td class="exalabel-row25">Empfehlungen:</td>
 					<td>
-						<input type="text" name="recommendation"/>
+						<input type="text" name="recommendation" value="'.(isset($audit->recommendation) ? $audit->recommendation : '').'"/>
 					</td>
 				</tr>
 				<tr>
 					<td class="exalabel-row25">Auflagen:</td>
 					<td>
-						<input type="text" name="requirements"/>
+						<input type="text" name="requirements" value="'.(isset($audit->requirements) ? $audit->requirements : '').'"/>
 					</td>
 				</tr>
 				<tr>
 					<td class="exalabel-row25">TeilnehmerInnen:</td>
 					<td>
-						<input type="text" name="participants"/>
+						<input type="text" name="participants" value="'.(isset($audit->participants) ? $audit->participants : '').'"/>
 					</td>
 				</tr>
 				<tr>
 					<td class="exalabel-row25">Für das Protokoll:</td>
 					<td>
-						<input type="text" name="protocol"/>
+						<input type="text" name="protocol" value="'.(isset($audit->protocol) ? $audit->protocol : '').'"/>
 					</td>
 				</tr>
 				<tr>
 					<td class="exalabel-row25">Datum des Audits:</td>
 					<td>
-						<input type="text" name="timecreated"/>
+						<input type="hidden" name="timecreated" value="'.$audit->timecreated.'"/>
+						<input type="text"value="'.date("d.m.Y",$audit->timecreated).'" disabled/>
 					</td>
 				</tr>
 				<tr class="exalabel-submit">
-					<td>Audit erteilen</td>
-					<td class="exalable-right"><input type="submit" value="Absenden"></td>
+					<td></td>
+					<td class="exalable-right">
+						<input type="hidden" name="formpage" value="'.PAGE_AUDIT.'"/>
+						<input type="submit" value="Absenden">
+					</td>
 				</tr>
 			</tbody>
-		</table>';
+		</table>
+		</form>';
 }

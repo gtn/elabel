@@ -51,16 +51,22 @@ if(!$request || $request->state < STATUS_REQUESTED) {
 		die;
 	
 	$editable = true;
-} else if($request && $request->state == STATUS_REQUESTED && has_capability('block/elabel:audit', $context)) {
+} else if($request && has_capability('block/elabel:audit', $context)) {
 	//to review the request i need to be a teacher in the current course
 	
-	$editable = true;
-	$audit = true;
+	if($request->state >= STATUS_REQUESTED)
+		$audit = true;
+	
+	if($request->state == STATUS_REQUESTED)
+		$editable = true;
 }
 
 if($_POST && $editable) {
 	block_elabel_save_formdata($_POST,$requestid,$labelcourseid);
 }
+//requestid might have changed
+$request = $DB->get_record('block_elabel_request', array('id'=>$requestid));
+
 $page_identifier = 'tab_request';
 
 $PAGE->set_url('/blocks/elabel/request.php', array('courseid' => $courseid,'requestid'=>$requestid, 'labelcourseid'=>$labelcourseid));
@@ -77,10 +83,10 @@ $pagenode->make_active();
 echo $OUTPUT->header();
 
 // build navigation
-echo block_elabel_get_navigation($pageid,$audit);
+echo block_elabel_get_navigation($pageid,$audit,($request && $request->state == STATUS_GRANTED));
 echo block_elabel_get_page_content($pageid,$request);
 
-//DISABLE FORM IF REQUEST REQUESTED
+//DISABLE FORM IF REQUEST ALREADY REQUESTED
 if(!$editable) {
 	echo '
 	<script type="text/javascript">

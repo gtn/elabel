@@ -65,24 +65,42 @@ if($action == 'submit') {
 }
 $table = new html_table();
 
-$table->head = array(html_writer::link($PAGE->url . "&sorting=title", get_string('title','block_elabel')),
-		html_writer::link($PAGE->url . "&sorting=to_status&type=desc", get_string('status','block_elabel')),
-		'');
+if(has_capability('block/elabel:audit', $context)) {
+	$data = block_elabel_get_all_requests($sorting);
+	echo $OUTPUT->box(get_string('teacher_description','block_elabel'));
+}
+else {
+	$data = block_elabel_get_my_courses();
+	echo $OUTPUT->box(get_string('student_description','block_elabel'));
+}
 
-$data = block_elabel_get_my_courses();
+$table->head = array(
+		html_writer::link($PAGE->url . "&sorting=title", get_string('title','block_elabel')),
+		html_writer::link($PAGE->url . "&sorting=faculty", get_string('faculty','block_elabel')),
+		html_writer::link($PAGE->url . "&sorting=username", get_string('username','block_elabel')),
+		html_writer::link($PAGE->url . "&sorting=state", get_string('status','block_elabel')),
+		html_writer::link($PAGE->url . "&sorting=timecreated", get_string('timecreated','block_elabel')),
+		html_writer::link($PAGE->url . "&sorting=timegranted", get_string('timegranted','block_elabel')),
+		'');
 $status = array(STATUS_NEW => get_string('status_new','block_elabel'),
 		STATUS_INPROGRESS => get_string('status_inprogress','block_elabel'),
 		STATUS_REQUESTED => get_string('status_requested','block_elabel'),
 		STATUS_GRANTED => get_string('status_granted','block_elabel'));
 
 foreach($data as &$record) {
-	$record['status'] = $status[$record['status']];
 	$record['actions'] = 
 		html_writer::link(
 			new moodle_url('/blocks/elabel/request.php', array('courseid'=>$courseid,'labelcourseid'=>$record['courseid'],'requestid'=>$record['requestid'])),
-			html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/elabel/pix/new.png'), 'alt'=>"", 'height'=>16, 'width'=>23)))
-		;
+			html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/elabel/pix/new.png'), 'alt'=>"", 'height'=>16, 'width'=>23)));
+		
+		if($record['status'] == STATUS_GRANTED)
+				$record['actions'] .= html_writer::link(
+					new moodle_url('/blocks/elabel/label.php', array('request'=>$record['requestid'])),
+					html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/elabel/pix/pdf.gif'), 'alt'=>"", 'height'=>16, 'width'=>16)),
+						array('target'=>'_blank'));
 
+	$record['status'] = $status[$record['status']];
+		
 	//don't display id, it is only used for the delete link
 	unset($record['requestid']);
 	unset($record['courseid']);
