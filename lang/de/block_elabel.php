@@ -45,10 +45,10 @@ $string['label_none'] = 'kein Label';
 $string['label_none_text'] = 'Für diesen Kurs ist kein Label vorhanden';
 $string['label_advanced'] = 'E-Learning Advanced';
 $string['label_advanced_pic'] = 'pix/Selbstevaluation_eLearningLabel_adv.png';
-$string['label_advanced_text'] = 'Das Label <b>E-Learning Advanced</b> kennzeichnet Lehrgänge der<br/>Hochschule für Agrar- und Umweltpädagogik, bei denen bildungstechnologische Ressourcen und<br/>Methoden<br/>in einer mittleren bis hohen Qualitäts- und Quantitätsstufe zum Einsatz kommen.';
+$string['label_advanced_text'] = 'Das Label <b>E-Learning Advanced</b> kennzeichnet Lehrgänge der<br/>Donau-Universität Krems bei denen bildungstechnologische Ressourcen und<br/>Methoden in einer mittleren bis hohen Qualitäts- und Quantitätsstufe zum Einsatz kommen.';
 $string['label_professional'] = 'E-Learning Professional';
 $string['label_professional_pic'] = 'pix/Selbstevaluation_eLearningLabel_pro.jpg';
-$string['label_professional_text'] = 'Das Label <b>E-Learning Professional</b> kennzeichnet Universitätslehrgänge<br/>der Hochschule für Agrar- und Umweltpädagogik bei denen bildungstechnologische Ressourcen<br/>und Methoden in einer hohen Qualitäts- und Quantitätsstufe zum Einsatz kommen.';
+$string['label_professional_text'] = 'Das Label <b>E-Learning Professional</b> kennzeichnet Universitätslehrgänge<br/>der Donau-Universität Krems bei denen bildungstechnologische Ressourcen<br/>und Methoden in einer hohen Qualitäts- und Quantitätsstufe zum Einsatz kommen.';
 
 $string['infotext'] = 'Ich bin mit dem Ergebnis zufrieden und möchte den Antrag endgültig absenden. Danach kann ich keine Änderungen mehr vornehmen.';
 $string['inforequested'] = 'Der Antrag wurde bereits zur Einsichtnahme eingereicht und es sind keine Änderungen mehr möglich.';

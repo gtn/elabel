@@ -1,7 +1,3 @@
-
-
-
-
 /* ######################################################################################################
 
 ** ### Vorbereitende Ma�?nahmen | Reset ##################################################################
@@ -10,25 +6,22 @@
 
 */
 
-	/* Hiermit werden die Randabstände und border aller HTML-Elemente auf Null gesetzt. Damit wird das       
+/* Hiermit werden die Randabstände und border aller HTML-Elemente auf Null gesetzt. Damit wird das       
 
 	** Aussehen der Webseite in unterschiedlichen Browsern vereinheitlicht. 
 
 	*/
+* {
+	margin: 0;
+	padding: 0;
+}
 
-	
+/* Das zurücksetzen der Innen- und Au�?enabstände verursacht zu kleine Selectboxen. Dies wird korrigiert */
+option {
+	padding-left: 0.4em
+}
 
-	* { margin:0; padding: 0; } 
-
-
-
-	/* Das zurücksetzen der Innen- und Au�?enabstände verursacht zu kleine Selectboxen. Dies wird korrigiert */
-
-	option {padding-left: 0.4em}
-
-	
-
-	/*
+/*
 
 	** Die nachfolgenden Angaben entstammen dem Artikel 'Useful Code Snippets' von Mike Foskett
 
@@ -36,53 +29,36 @@
 
 	*/
 
-	
-
-	/* Vertikalen Scrollbalken im Netscape & Firefox erzwingen. Dies verhindert, dass zentrierte Layouts 
+/* Vertikalen Scrollbalken im Netscape & Firefox erzwingen. Dies verhindert, dass zentrierte Layouts 
 
 	** um 10 Pixel springen wenn der Seiteninhalt kleiner wird als die Höhe des Browserfensters. */
+html {
+	height: 100%
+}
 
-	html { height: 100% } 
-
-	body { 
-
-	/*	min-height: 101%;	*/
-
+body { /*	min-height: 101%;	*/
 	/* Beseitigung des Rundungsfehlers bei Schriftgrö�?en im Opera sowie Standardformatierungen */
-
-		font-size: 100.01%; 
-
+	font-size: 100.01%;
 	/* FIX: Verhindert, dass positionierte Elemente nicht verschoben werden when die Grö�?e des Browser 
 
 			Fensters geändert wird. */
+	position: relative;
+	/* Vorgabe der Standardfarben und Textausrichtung*/
+	color: #000;
+	background: #fff;
+	text-align: left;
+}
 
-		position: relative; 
+/* Standardrahmen zurücksetzen */
+fieldset,img {
+	border: 0;
+}
 
-	
+/* Anpassung für Safari Browser. font-size:100% ist für den Safari in Formularen zu gro�? */
+select,input,textarea {
+	font-size: 99%
+}
 
-	/* Vorgabe der Standardfarben und Textausrichtung*/     
-
-		color: #000;        
-
-		background: #fff;
-
-		text-align: left; 
-
-	} 
-
-	
-
-	/* Standardrahmen zurücksetzen */
-
-	fieldset, img { border:0; }
-
-	
-
-	/* Anpassung für Safari Browser. font-size:100% ist für den Safari in Formularen zu gro�? */ 
-
-	select, input, textarea { font-size: 99% }
-
-	
 /* ######################################################################################################
 
 ** ### Markupfreie CSS-Floatclearing-Lösungen ###########################################################
@@ -91,41 +67,44 @@
 
 */
 
+/* Clearfix-Methode zum Clearen der Float-Umgebungen */
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
 
-
-	/* Clearfix-Methode zum Clearen der Float-Umgebungen */
-	 .clearfix:after {
-		content: "."; 
-		display: block; 
-		height: 0; 
-		clear: both; 
-		visibility: hidden;
-	}
-
-	.clearfix {display: inline-block;}
+.clearfix {
+	display: inline-block;
+}
 
 /* Hides from IE-mac \*/
-* html .clearfix  {height: 1%;}
+* html .clearfix {
+	height: 1%;
+}
 
-.clearfix  {display: block;}
+.clearfix {
+	display: block;
+}
 
 /* End hide from IE-mac */
 
 /* Diese Angabe bentigt der Safari-Browser zwingend !! */
-	.clearfix  { display: block; } 
+.clearfix {
+	display: block;
+}
 
-	/* Overflow-Methode zum Clearen der Float-Umgebungen */
-	.clearfix  { overflow:hidden; }
+/* Overflow-Methode zum Clearen der Float-Umgebungen */
+.clearfix {
+	overflow: hidden;
+}
 
-	/* IE-Clearing: Bentigt nur der Internet Explorer und er iehacks.css zugeschaltet */
-
-	#ie_clearing { display: none }
-
-	
-
-
-
-	
+/* IE-Clearing: Bentigt nur der Internet Explorer und er iehacks.css zugeschaltet */
+#ie_clearing {
+	display: none
+}
 
 /* ####################################### Ende Clearing ####################################### */
 
@@ -136,112 +115,112 @@
 ** ######################################################################################################
 
 */
-
-body { 
-  font: 13px Arial, sans-serif;
-  color:#000;
-  font-size: 13px;
-  background-color: #fff;
-  margin:17px;
-  -moz-hyphens: auto;
-    word-wrap: break-word;
-  }
-
-html, body {
-
-  height:100%; 
+body {
+	font: 13px Arial, sans-serif;
+	color: #000;
+	font-size: 13px;
+	background-color: #fff;
+	margin: 17px;
+	-moz-hyphens: auto;
+	word-wrap: break-word;
 }
 
-
-
+html,body {
+	height: 100%;
+}
 
 /* -------------- Start Plugin CSS - CSS Implementation erst ab hier ------------------- */
-
-
- .exaLabel-Tabs ul {
+.exaLabel-Tabs ul {
 	list-style: none outside none;
-    margin: 0;
-    border-collapse: collapse;
-    border-bottom: 1px solid #cacaca;
-    margin-bottom: 30px;
-    float: left;
+	margin: 0;
+	border-collapse: collapse;
+	float: left;
 }
 
- .exaLabel-Tabs ul > li {
+.exaLabel-Tabs ul>li {
 	float: left;
 	display: block;
-    position: relative;
-    border-left: 1px solid #e7e6e6;
-    border-collapse: collapse;
+	position: relative;
+	border-left: 1px solid #e7e6e6;
+	border-collapse: collapse;
+	line-height: 1.3;
 }
 
- .exaLabel-Tabs ul > li:last-child {
+.exaLabel-Tabs ul>li a {
+	min-height: 54px;
+}
+/* 
+.exaLabel-Tabs ul > li:last-child {
     border-right: 1px solid #cacaca;
 }
-
- .exaLabel-Tabs ul > li:first-child {
-    border-left: 1px solid #cacaca;
+*/
+.exaLabel-Tabs ul>li:first-child {
+	border-left: 0px;
 }
 
- .exaLabel-Tabs ul > li > a {
+.exaLabel-Table th.exsubTitle {
+	color: #000;
+	font-weight: normal;
+	text-transform: none;
+}
+
+.exaLabel-Table-Head th.exHeSeNav {
+	padding-bottom: 0;
+}
+
+.exaLabel-Tabs ul>li>a {
 	display: block;
-    position: relative;
-    padding: 10px 8px;
-    background-color: #f6f6f6;
+	position: relative;
+	padding: 10px 8px;
+	background-color: #f6f6f6;
 }
 
- .exaLabel-Tabs ul > li > a:after {
-	content: '>';
+.exaLabel-Tabs ul>li>a:after {
 	padding-left: 10px;
 	color: #969696;
 	font-weight: normal;
 }
 
-
- .exaLabel-Tabs ul > li > a:hover {
-    background-color: #f6f6f6;
+.exaLabel-Tabs ul>li>a:hover {
+	background-color: #f6f6f6;
 }
 
- .exaLabel-Tabs ul > li.active > a {
-    background-color: #e2e2e2;
+.exaLabel-Tabs ul>li.active>a {
+	background-color: #e2e2e2;
 }
 
 .exaLabel-Table {
 	min-width: 800px;
 	border-collapse: collapse;
-
 }
 
-.exaLabel-Table, .exaLabel-Table td, .exaLabel-Table thead > th {
+.exaLabel-Table,.exaLabel-Table td,.exaLabel-Table thead>th {
 	border-collapse: collapse;
-    border: 1px solid #cacaca;
+	border: 1px solid #cacaca;
 }
-
-
-
 
 /* -------------- UNI Krems ------------------- */
-
- .exaLabel-Tabs ul {
-    border-top: 4px solid #01267f;
+.exaLabel-Tabs ul {
+	border-top: 1px solid #cacaca;
+	width: 100%;
 }
 
- .exaLabel-Tabs ul > li > a {
+.exaLabel-Tabs ul>li>a {
 	text-transform: uppercase;
 	background-color: #fff;
 	color: #585858;
 	text-decoration: none;
-	font-weight: 700;
-	font-size: 12px;
+	font-weight: normal;
+	font-size: 11px;
 }
 
- .exaLabel-Tabs ul > li.active > a,  .exaLabel-Tabs ul > li > a:hover  {
-    background-color: #e6e5ea;
+.exaLabel-Tabs ul>li.active>a,.exaLabel-Tabs ul>li>a:hover {
+	background-color: #01267f;
+	color: #fff;
 }
 
 .exaLabel-Table th {
-	background-color: #01267f;
-	color: #fff;
+	color: #01267f;
 }
 
 .exaLabel-Table-Head h1 {
@@ -249,7 +228,7 @@ html, body {
 }
 
 .exaLabel-Table th {
-	background-color: #01267f;
+	background-color: #fff
 }
 
 .exaLabel-Table-Head {
@@ -257,8 +236,16 @@ html, body {
 }
 
 .exaLabel-Table-Head th {
-	padding: 10px;
+	padding-bottom: 10px;
+	padding-top: 10px;;
+	padding-left: 0;
+	padding-right: 0;
 	width: 33%;
+}
+
+.exaLabel-Table-Head th.exTitle {
+	padding-top: 10px;
+	border-top: 4px solid #01267f;
 }
 
 .exHeSe {
@@ -283,10 +270,11 @@ html, body {
 }
 
 .exaLabel-Table tbody tr:nth-child(2n+1) {
-    background-color: #f9f9f9;
+	background-color: #f9f9f9;
 }
 
-.exaLabel-Table tbody .exaLabel-Description, .exaLabel-Table tbody .exaLabel-Description-head {
+.exaLabel-Table tbody .exaLabel-Description,.exaLabel-Table tbody .exaLabel-Description-head
+	{
 	text-align: center;
 	padding-top: 20px;
 	padding-bottom: 20px;
@@ -298,8 +286,6 @@ html, body {
 	text-align: center;
 	font-weight: bold;
 }
-
-
 
 .exaLabel-Table tbody .exalabel-topic .exalabel-topic-title {
 	text-align: left;
@@ -319,12 +305,14 @@ html, body {
 	text-align: center;
 }
 
-.exalabel-row-more, .exalable-right, .exaLabel-Table tbody .exalabel-Angaben-Audit td.exalabel-row-right {
+.exalabel-row-more,.exalable-right,.exaLabel-Table tbody .exalabel-Angaben-Audit td.exalabel-row-right
+	{
 	text-align: right;
 	vertical-align: top;
 }
 
-.exaLabel-Table tbody .exalabel-Angaben td, .exaLabel-Table tbody .exalabel-Angaben-Audit td.exalabel-row-right {
+.exaLabel-Table tbody .exalabel-Angaben td,.exaLabel-Table tbody .exalabel-Angaben-Audit td.exalabel-row-right
+	{
 	width: 50%;
 }
 
@@ -346,10 +334,13 @@ html, body {
 
 .exaLabel-Table tbody .exalabel-submit td.exalable-right {
 	border-left: none !important;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
 }
 
 .exaLabel-Table tbody .exaLabel-evaluation-head td {
-	
 	text-align: center;
 	width: 33%;
 	color: #01267f;
@@ -357,74 +348,69 @@ html, body {
 
 .exaLabel-Table tbody .exaLabel-evaluation-head td.label_none {
 	background-color: #f2dede;
-    border-color: #ebccd1;
-    color: #a94442;
-    font-weight: bold;
+	border-color: #ebccd1;
+	color: #a94442;
+	font-weight: bold;
 }
 
 .exaLabel-Table tbody .exaLabel-evaluation-head td.label_advanced {
 	background-color: #fcf8e3;
-    border-color: #faebcc;
-    color: #8a6d3b;
-    font-weight: bold;
+	color: #8a6d3b;
+	font-weight: bold;
 }
 
 .exaLabel-Table tbody .exaLabel-evaluation-head td.label_professional {
 	background-color: #dff0d8;
-    border-color: #d6e9c6;
-    color: #3c763d;
-    font-weight: bold;
+	color: #3c763d;
+	font-weight: bold;
 }
 
-#exaLabel #exaLabel-Award {
-	margin: 20px auto;
+#exaLabel-Award {
+	margin: 40px auto;
 	max-width: 960px;
-	 border: 1px solid #cacaca;
-	 box-shadow: 0 0 5px rgba(50, 50, 50, 0.21);
-	 padding: 30px;
-	 font-size: 14.5px;
+	border: 1px solid #cacaca;
+	box-shadow: 0 0 5px rgba(50, 50, 50, 0.21);
+	padding: 30px;
+	font-size: 14.5px;
 }
 
-#exaLabel #exaLabel-Award p, #exaLabel #exaLabel-Award h1 {
+#exaLabel-Award p,#exaLabel-Award h1 {
 	text-align: center;
 }
 
-#exaLabel #exaLabel-Award .exaLabel-AwardLogo, #exaLabel #exaLabel-Award .exaLabel-AwardLogo img {
+#exaLabel-Award .exaLabel-AwardLogo,#exaLabel-Award .exaLabel-AwardLogo img
+	{
 	width: 140px;
 	margin: 0 auto;
 }
 
-#exaLabel #exaLabel-Award .exaLabel-AwardLabel, #exaLabel #exaLabel-Award .exaLabel-AwardLabel img {
+#exaLabel-Award .exaLabel-AwardLabel,#exaLabel-Award .exaLabel-AwardLabel img
+	{
 	width: 240px;
 	margin: 0 auto;
-} 
+}
 
-#exaLabel #exaLabel-Award .exaLabel-AwardLogo {
+#exaLabel-Award .exaLabel-AwardLogo {
 	margin-bottom: 30px;
 }
 
-#exaLabel #exaLabel-Award h1 {
+#exaLabel-Award h1 {
 	font-weight: normal;
 	font-size: 38px;
 	margin-bottom: 40px;
 	color: #01267f;
 }
 
-#exaLabel #exaLabel-Award p.exaLabel-Award-Course {
+#exaLabel-Award p.exaLabel-Award-Course {
 	font-weight: bold;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
-#exaLabel #exaLabel-Award .exaLabel-AwardDate {
+#exaLabel-Award .exaLabel-AwardDate {
 	text-align: left;
-	margin-top: 25px;
 }
-.exaLabel-City {
-	margin-left: 75px;
-	text-align: left !important;
-	margin-top: 40px;
-}
+
 table.exaLabel-AwardDate {
 	border: none;
 	width: 90%;
@@ -436,57 +422,62 @@ table.exaLabel-AwardDate td {
 	padding: 20px;
 }
 
-.exaLabel-Table tbody .exalabel-topicev_grad, .exaLabel-Table tbody .exalabel-topicev_gew  {
-	padding-top: 20px;
+.exaLabel-Table tbody .exalabel-topicev_grad,.exaLabel-Table tbody .exalabel-topicev_gew
+	{
+	padding-top: 10px;
+	padding-bottom: 10px;
 	text-align: center;
 	font-weight: bold;
 }
 
-.exaLabel-Table tbody .exalabel-topicev_grad  {
+.exaLabel-Table tbody .exalabel-topicev_grad {
 	background-color: #B8D331;
 	color: #000;
 }
 
-.exaLabel-Table tbody .exalabel-topicev_gew  {
+.exaLabel-Table tbody .exalabel-topicev_gew {
 	background-color: #FBBF1F;
 	color: #000;
 }
 
-.exaLabel-Table #min, .exaLabel-Table #max {
+.exaLabel-Table #min,.exaLabel-Table #max {
 	float: left;
 	width: 50%;
 	text-align: center;
+}
+
+.exalabel-submit-score {
+	background-color: #b8d331;
 }
 
 .exaLabel-Table #score {
 	text-align: center;
 	font-weight: bold;
 	padding-top: 8px;
+	padding-bottom: 8px;
 	clear: both;
-} 
+}
+
+.exaLabel-howto-text {
+	text-align: center;
+}
+
 .radargraph {
-width: 85%;
-float: left;
-box-sizing: border-box;
-display: block;
+	width: 85%;
+	float: left;
+	box-sizing: border-box;
+	display: block;
 }
+
 .bargraph {
-width: 15%;
-float: left;
-box-sizing: border-box;
-display: block;
+	width: 15%;
+	float: left;
+	box-sizing: border-box;
+	display: block;
 }
-.infotext {
-	text-align: center;
-width: 70%;
-float: left;
-box-sizing: border-box;
-display: block;
-}
-.submitbutton {
-	text-align: center;
-width: 30%;
-float: left;
-box-sizing: border-box;
-display: block;
+
+.exaLabel-City {
+	margin-left: 75px;
+	text-align: left !important;
+	margin-top: 40px;
 }

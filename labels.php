@@ -91,7 +91,7 @@ foreach($data as &$record) {
 	$record['actions'] = 
 		html_writer::link(
 			new moodle_url('/blocks/elabel/request.php', array('courseid'=>$courseid,'labelcourseid'=>$record['courseid'],'requestid'=>$record['requestid'])),
-			html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/elabel/pix/new.png'), 'alt'=>"", 'height'=>16, 'width'=>23)));
+			html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/elabel/pix/new.gif'), 'alt'=>"", 'height'=>16, 'width'=>23)));
 		
 		if($record['status'] == STATUS_GRANTED)
 				$record['actions'] .= html_writer::link(

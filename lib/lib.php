@@ -27,7 +27,8 @@ define('STATUS_INPROGRESS',0);
 define('STATUS_REQUESTED',1);
 define('STATUS_GRANTED',2);
 
-define('PAGE_METAINFO',0);
+define('PAGE_HOWTO', 0);
+define('PAGE_METAINFO',50);
 define('PAGE_RESULT', 100);
 define('PAGE_AUDIT',200);
 define('PAGE_PDF',250);
@@ -127,10 +128,12 @@ function block_elabel_get_my_courses() {
  */
 function block_elabel_get_navigation($pageid, $audit = false, $pdf = false) {
 	global $DB,$PAGE;
-	
+	/*
 	$menu = '
 	<div class="exaLabel-Tabs">
 		<ul>
+			<li'.(($pageid == PAGE_HOWTO) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_HOWTO.'">Anleitung</a></li>
+		
 			<li'.(($pageid == PAGE_METAINFO) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_METAINFO.'">Angaben zum Lehrgang</a></li>';
 	
 			foreach($DB->get_records('block_elabel_page') as $page)
@@ -143,12 +146,63 @@ function block_elabel_get_navigation($pageid, $audit = false, $pdf = false) {
 				$menu .= '<li'.(($pageid == PAGE_PDF) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_PDF.'">Label (PDF)</a></li>';
 		$menu .= '
 		</ul>
-	</div>';
+	</div>';*/
+		if($pageid == PAGE_METAINFO) 
+			$title = "Angaben zum Lehrgang";
+		else if($pageid == PAGE_HOWTO)
+			$title = "Anleitung";
+		else if($pageid == PAGE_RESULT || $pageid == 8)
+			$title = "Auswertung";
+		else if($pageid == PAGE_AUDIT)
+			$title = "Audit";
+		else
+			$title = "Evaluation";
+		
+	$colspan = ($pageid == PAGE_RESULT || $pageid == 8) ? 3 : 2;
+		$menu = '
+		<div style="clear: both;"></div>
+		<table class="exaLabel-Table" cellspacing="0" cellpadding="0">
+			<thead>
+				<tr>
+					<th colspan="'.$colspan.'">
+						<table class="exaLabel-Table-Head" cellspacing="0" cellpadding="0">
+							<tr>
+								<th colspan="3" class="exHeSe exTitle"><h1>'.$title.'</h1></th>
+							</tr>
+							<tr>
+								<th colspan="3" class="exHeSe exHeSeNav">
+									<div class="exaLabel-Tabs">
+										<ul>
+											<li'.(($pageid == PAGE_HOWTO) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_HOWTO.'">Anleitung</a></li>
+										
+											<li'.(($pageid == PAGE_METAINFO) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_METAINFO.'">Angaben<br/>zum<br/>Lehrgang</a></li>';
+									
+											foreach($DB->get_records('block_elabel_page') as $page)
+												$menu .= '<li'.(($pageid == $page->id) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.$page->id.'">'.$page->shorttitle.'<br/>'.str_replace(' ','<br/>',$page->title).'</a></li>';
+											
+											$menu .= '<li'.(($pageid == PAGE_RESULT) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_RESULT.'">Auswertung</a></li>';
+											if($audit) 
+												$menu .= '<li'.(($pageid == PAGE_AUDIT) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_AUDIT.'">Audit</a></li>';
+											if($pdf)
+												$menu .= '<li'.(($pageid == PAGE_PDF) ? ' class="active" ' : '' ).'><a name="formnav" href="'.$PAGE->url . '&pageid='.PAGE_PDF.'">Label (PDF)</a></li>';
+										$menu .= '
+										</ul>
+									</div>
+								</th>
+							</tr>
+						</table>
+					</th>
+				</tr>
+			</thead>
+		';
 			
 	return $menu;
 }
 function block_elabel_get_page_content($pageid, $request) {
 	global $DB;
+	if($pageid == PAGE_HOWTO)
+		return block_elabel_get_howto_page($request);
+	
 	if($pageid == PAGE_METAINFO)
 		return block_elabel_get_metainfo_page($request);
 	
@@ -225,24 +279,9 @@ function block_elabel_get_metainfo_page($data) {
 		$data->departmentnotification = false;
 		$data->timecreated = time();
 	}
-	return '<div style="clear: both;"></div>
+	return '
 			<form name="request" id="request" method="POST" action="'.$PAGE->url.'&pageid=1">
-			<input type="hidden" name="formpage" value="0">
-			<table class="exaLabel-Table">
-			<thead>
-				<tr>
-					<th colspan="2">
-					
-						<table class="exaLabel-Table-Head">
-							<tr>
-								<th class="exHeFi">E-Learning Label</th>
-								<th class="exHeSe"><h1>Angaben zum Lehrgang</h1></th>
-								<th class="exHeTh"><img src="pix/duk_logo_00.png" alt=""></th>
-							</tr>
-						</table>
-					</th>
-				</tr>
-			</thead>
+			<input type="hidden" name="formpage" value="'.PAGE_METAINFO.'">
 			
 			<tbody>
 				
@@ -377,7 +416,7 @@ function block_elabel_get_metainfo_page($data) {
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Sonstige Angaben zum Lehrgang (optional)</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->other.'" name="other">
+						<textarea rows="4" cols="50" name="other">'.$data->other.'</textarea>
 					</td>
 				</tr>
 				
@@ -426,8 +465,72 @@ function block_elabel_get_metainfo_page($data) {
 					<td class="exalable-right"><input type="submit" value="Weiter"></td>
 				</tr>
 			</tbody>
-		</table>
-		</form>';
+		</form>
+	</table>';
+}
+
+/**
+ * Prints first form page
+ */
+function block_elabel_get_howto_page($data) {
+	global $DB,$PAGE,$USER;
+
+	
+	return '
+	<form name="request" id="request" method="POST" action="'.$PAGE->url.'&pageid='.PAGE_HOWTO.'">
+	<input type="hidden" name="formpage" value="0">
+		
+	<tbody>
+
+	<tr>
+	<td class="exaLabel-Description-head" colspan="2"><h2>Durchführung der Selbstevaluation</h2>
+	</td>
+	</tr>
+	
+	<tr class="exalabel-Angaben">
+	<td colspan="2">
+		Die Evaluation erfolgt anhand der Arbeitsblätter <b>Angaben zum LG</b> und der sieben Evaluationsformulare <b>1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.</b><br/>
+		Eintragungen sind jeweils in den rot umrandeten Feldern vorgesehen. Die Selbstevaluation anhand der
+		Evaluationsformulare besteht aus zwei Schritten: <br/><br/>
+
+		1.) Anhand von Indikatoren wird das jeweilige Evaluationskriterium erläutert. Es erfolgt eine Orientierung durch Angaben (Listbox) in der Spalte <b><trifft zu></b>. Abhängig von der dreistufigen Auswahl   ("gar nicht", "teilweise", "gänzlich") wird ein min-Wert und ein max-Wert ermittelt. Es erscheint in Abhängigkeit dieser Werte der Zellbereich des Sliders in grüner oder roter Schattierung. Die  min- und max-Werte führen zur Eingrenzung des Evaluationsbereiches. Da die Indikatoren jedoch keine vollständige Charakterisierung zulassen, kann der Slider  über die Grenzen der beiden Werte hinausverschoben werden.
+		<br/><br/>
+		2.) Die eigentliche Selbstevaluation erfolgt durch Angabe eines <b>Erfüllungsgrades [in %]</b> mittels Positionierung eines Sliders auf einer Prozentskala (siehe Beispielabbildung).
+		<div class="exaLabel-howto-text">
+			<img style="width:70%" src="pix/slider.png">
+		</div>
+	</td>
+	</tr>
+
+	<tr>
+	<td class="exaLabel-Description-head" colspan="2"><h2>Berechnung</h2>
+	</td>
+	</tr>
+	<tr class="exalabel-Angaben">
+	<td colspan="2">
+		Die Berechnung und Auswertung kann dem Arbeitsblatt Auswertung entnommen werden.
+		Die Berechnung erfolgt durch Ermittlung von Punktewerten, die sich aus aus dem jeweiligen eingegebenen Erfüllungsgrad und der zugehörigen vorgegebenen Gewichtung ergibt.
+		Aus den dreistufigen Angaben in den Feldern <trifft zu> resultiert eine Bereichseinschränkung des möglichen Erfüllungsgrades, die jedoch von der Erfüllungsgradangabe mittels Slider überschrieben werden kann.
+		Ausschliesslich die mittels Slider vorgenommene Eingabe wird für die Berechnung herangezogen.
+		Die Auswertung zeigt den Erfüllungsgrad pro Kategorie an, sowie einen kumulativen Punktewert, der als Kriterium für die Labelzuteilung dient.
+	</td>
+	</tr>
+	<tr>
+	<td class="exaLabel-Description-head" colspan="2"><h2>Was ist noch zu tun?</h2>
+	</td>
+	</tr>
+	<tr class="exalabel-Angaben">
+	<td colspan="2">
+	Die Auswertung bildet die Grundlage für den anschliessenden Audit. Das fertig ausgefüllte Formular bitte abspeichern
+	und senden an: elearning@donau-uni.ac.at  mit Betreff: Selbstevaluation.
+	Im Anschluss daran erfolgt der Audit am E-Learning Center nach Terminvereinbarung.	
+	</td>
+	</tr>
+	</tbody>
+	</table>
+	<input type="hidden" name="formpage" value="'.PAGE_HOWTO.'"/>
+	</form>
+	</table>';
 }
 /**
  * Builds evaluation form pages, based on the questions and questiongroups in the database
@@ -444,27 +547,12 @@ function block_elabel_get_evaluation_page($pageid, $request) {
 	
 	$answers = $DB->get_records_menu('block_elabel_qinstance',array('requestid'=>$request->id),'','questionid,answer');
 	
-	$content = '<div style="clear: both;"></div>
+	$content = '
 		<form name="request" id="request" method="POST" action="'.$PAGE->url.'&pageid='.($pageid+1).'">
 		<input type="hidden" name="formpage" value="'.$pageid.'">
-		<table class="exaLabel-Table">
-			<thead>
-				<tr>
-					<th colspan="2">
-					
-						<table class="exaLabel-Table-Head">
-							<tr>
-								<th class="exHeFi">E-Learning Label</th>
-								<th class="exHeSe"><h1>EVALUATION</h1></th>
-								<th class="exHeTh"><img src="pix/duk_logo_00.png" alt=""></th>
-							</tr>
-						</table>
-					</th>
-				</tr>
-			</thead>
 			<tbody>
 				<tr>
-					<td class="exaLabel-Description-head" colspan="2"><h2>'.$page->shorttitle . ' ' . $page->title .'</h2>
+					<td class="exaLabel-Description-head" colspan="2">
 					<p>'.$page->description.'</p>
 					</td>
 				</tr>
@@ -515,15 +603,18 @@ function block_elabel_get_evaluation_page($pageid, $request) {
 					</td>
 				</tr>
 				<tr class="exalabel-submit">
-					<td class="exalabel-slider"><div id="slider"></div></td>
+					<td rowspan="2" class="exalabel-slider"><div id="slider"></div></td>
 					<td class="exalable-right">
 						<div id="min">min: 0</div>
 						<div id="max">max: 22</div>
-						<div id="score"></div>
 						<input type="hidden" id="weightvalue" value="'.$labelconfig->weights[$page->id].'">
 						<input type="hidden" id="pagemultiplier" value="'.$labelconfig->multipliers[$page->id].'">
 						<input type="hidden" name="pagevalue" id="pagevalue" value="'.((isset($pageinstance->value)) ? $pageinstance->value : 0).'">
 					</td>
+				</tr>
+				<tr>
+					<td><div id="score"></div>
+				</td>
 				</tr>
 			<tr class="exalabel-submit">
 					<td></td>
@@ -531,7 +622,7 @@ function block_elabel_get_evaluation_page($pageid, $request) {
 				</tr>
 			</tbody>
 		</table>';
-			return $content;
+		return $content;
 }
 function block_elabel_get_questions_for_page($pageid) {
 	global $DB;
@@ -544,16 +635,16 @@ function block_elabel_get_questions_for_page($pageid) {
 function block_elabel_save_formdata($data, &$requestid, $courseid) {
 	global $USER, $DB, $CFG;
 	if(!isset($data['formpage']))
-		$data['formpage'] = 0;
+		$data['formpage'] = PAGE_METAINFO;
 	
 	if($data['formpage'] > 0 && $data['formpage'] < 8) {
 		$pageinstance = $DB->delete_records('block_elabel_pageinstance', array('requestid'=>$requestid,'pageid'=>$data['formpage']));
 		$DB->insert_record('block_elabel_pageinstance', array('requestid'=>$requestid,'pageid'=>$data['formpage'],'userid'=>$USER->id,'value'=>$data['pagevalue']));
 	}
 	unset($data['pagevalue']);
-	
+
 	$request = $DB->get_record('block_elabel_request',array('id'=>$requestid));
-	if($data['formpage'] == 0 && !$request) {
+	if($data['formpage'] == PAGE_METAINFO && !$request) {
 		$data['courseid'] = $courseid;
 		$data['userid'] = $USER->id;
 		$data['timecreated'] = time();
@@ -561,7 +652,7 @@ function block_elabel_save_formdata($data, &$requestid, $courseid) {
 		$DB->delete_records('block_elabel_request',array('courseid'=>$courseid));
 		$requestid = $DB->insert_record('block_elabel_request', $data);
 		return;
-	} elseif($data['formpage'] == 0) {
+	} elseif($data['formpage'] == PAGE_METAINFO) {
 		foreach($data as $name => $field) {
 			$request->{$name} = $field;
 		}
@@ -613,22 +704,6 @@ function block_elabel_get_result_page($request) {
 	$content = '
 		<form name="request" id="request" method="POST" action="'.new moodle_url('/blocks/elabel/labels.php?courseid='.$COURSE->id).'&action=submit">
 		<input type="hidden" name="requestid" value="'.$request->id.'"/>
-		<div style="clear: both;"></div>
-		<table class="exaLabel-Table">
-			<thead>
-				<tr>
-					<th colspan="3">
-						<table class="exaLabel-Table-Head">
-							<tr>
-								<th class="exHeFi">E-Learning Label</th>
-								<th class="exHeSe"><h1>Auswertung</h1></th>
-								<th class="exHeTh"><img src="pix/duk_logo_00.png" alt=""></th>
-							</tr>
-						</table>
-					</th>
-				</tr>
-			</thead>
-			
 			<tbody>
 			';
 			if($total >= $labelconfig->labelprofessional)
@@ -651,7 +726,6 @@ function block_elabel_get_result_page($request) {
 						<div class="bargraph"><canvas width="50" id="bar_canvas"></canvas>	</div>					
 					</td>
 				</tr>
-				
 				
 				<tr>
 					<td colspan="3">';
@@ -764,21 +838,6 @@ function block_elabel_get_audit_page($request) {
 	return 
 	'
 	<form name="request" id="request" method="POST" action="'.$PAGE->url.'&pageid='.PAGE_AUDIT.'">
-	<div style="clear: both;"></div>
-		<table class="exaLabel-Table">
-			<thead>
-				<tr>
-					<th colspan="2">
-						<table class="exaLabel-Table-Head">
-							<tr>
-								<th class="exHeFi">E-Learning Label</th>
-								<th class="exHeSe"><h1>Audit</h1></th>
-								<th class="exHeTh"><img src="pix/duk_logo_00.png" alt=""></th>
-							</tr>
-						</table>
-					</th>
-				</tr>
-			</thead>
 			<tbody>
 				<tr>
 					<td class="exaLabel-Description-head" colspan="2"><h2>Angaben und Auswertung</h2>
@@ -811,7 +870,7 @@ function block_elabel_get_audit_page($request) {
 				<tr class="exalabel-Angaben-Audit">
 					<td class="exalabel-row-right">Punktebewertung:</td>
 					<td>
-						Punkte: '.$total.'
+						Punkte: '.round($total,0).'
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben-Audit">
@@ -845,51 +904,48 @@ function block_elabel_get_audit_page($request) {
 					</td>
 				</tr>
 			</tbody>
-		</table>
-		<table class="exaLabel-Table exaLabel-TableSec">
-			<tbody>
 				<tr>
 					<td class="exaLabel-Description-head" colspan="2"><h2>Protokoll</h2>
 					</td>
 				</tr>
 				<tr>
-					<td class="exalabel-row25">Anmerkungen:</td>
+					<td class="exalabel-row-right">Anmerkungen:</td>
 					<td>
-						<input type="text" name="note" value="'.(isset($audit->note) ? $audit->note : '').'"/>
+						<textarea name="note" rows="4" cols="50">'.((isset($audit->note)) ? $audit->note : '').'</textarea>
 					</td>
 				</tr>
 				<tr>
-					<td class="exalabel-row25">Evaluation:</td>
+					<td class="exalabel-row-right">Evaluation:</td>
 					<td>
 						<textarea name="evaluation" rows="4" cols="50">'.((isset($audit->evaluation)) ? $audit->evaluation : '').'</textarea>
 					</td>
 				</tr>
 				<tr>
-					<td class="exalabel-row25">Empfehlungen:</td>
+					<td class="exalabel-row-right">Empfehlungen:</td>
 					<td>
-						<input type="text" name="recommendation" value="'.(isset($audit->recommendation) ? $audit->recommendation : '').'"/>
+						<textarea name="recommendation" rows="4" cols="50">'.((isset($audit->recommendation)) ? $audit->recommendation : '').'</textarea>
 					</td>
 				</tr>
 				<tr>
-					<td class="exalabel-row25">Auflagen:</td>
+					<td class="exalabel-row-right">Auflagen:</td>
 					<td>
-						<input type="text" name="requirements" value="'.(isset($audit->requirements) ? $audit->requirements : '').'"/>
+						<textarea name="requirements" rows="4" cols="50">'.((isset($audit->requirements)) ? $audit->requirements : '').'</textarea>
 					</td>
 				</tr>
 				<tr>
-					<td class="exalabel-row25">TeilnehmerInnen:</td>
+					<td class="exalabel-row-right">TeilnehmerInnen:</td>
 					<td>
 						<input type="text" name="participants" value="'.(isset($audit->participants) ? $audit->participants : '').'"/>
 					</td>
 				</tr>
 				<tr>
-					<td class="exalabel-row25">Für das Protokoll:</td>
+					<td class="exalabel-row-right">Für das Protokoll:</td>
 					<td>
 						<input type="text" name="protocol" value="'.(isset($audit->protocol) ? $audit->protocol : '').'"/>
 					</td>
 				</tr>
 				<tr>
-					<td class="exalabel-row25">Datum des Audits:</td>
+					<td class="exalabel-row-right">Datum des Audits:</td>
 					<td>
 						<input type="hidden" name="timecreated" value="'.$audit->timecreated.'"/>
 						<input type="text"value="'.date("d.m.Y",$audit->timecreated).'" disabled/>
@@ -906,3 +962,4 @@ function block_elabel_get_audit_page($request) {
 		</table>
 		</form>';
 }
+

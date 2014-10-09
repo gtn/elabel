@@ -83,14 +83,17 @@ $pagenode->make_active();
 echo $OUTPUT->header();
 
 // build navigation
+echo "<div id='exalabel'>";
 echo block_elabel_get_navigation($pageid,$audit,($request && $request->state == STATUS_GRANTED));
 echo block_elabel_get_page_content($pageid,$request);
+echo "</div>";
 
 //DISABLE FORM IF REQUEST ALREADY REQUESTED
 if(!$editable) {
 	echo '
 	<script type="text/javascript">
 		$(":input").prop("disabled", true);
+		$( "#slider" ).slider({ disabled: true });
 	</script>';
 }
 

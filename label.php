@@ -89,9 +89,9 @@ div.c1 {
 
 			<p class="exaLabel-Award-Course">'.$request->coursename.'</p>
 
-			<p>Jhg '.$request->year.' SKZ '.$request->internalnumber. '</p>
+			<p>Jhg '.$request->year.', SKZ '.$request->internalnumber. '</p>
 
-			<p>wird stattgegeben</p>
+			<p>wird stattgegeben.</p>
 			<br />
 			<p>Der gegenständliche Lehrgang kann mit dem Label</p>
 
