@@ -481,3 +481,6 @@ table.exaLabel-AwardDate td {
 	text-align: left !important;
 	margin-top: 40px;
 }
+body.print {
+    height: auto;
+}

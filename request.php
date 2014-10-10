@@ -16,10 +16,12 @@
 
 /**
  * Collection of useful functions and constants
-*
-* @package   block_elabel
-* @copyright Florian Jungwirth <fjungwirth@gtn-solutions.com>
-* @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @package    block_elabel
+ * @copyright  gtn gmbh <office@gtn-solutions.com>
+ * @author	   Florian Jungwirth <fjungwirth@gtn-solutions.com>
+ * @ideaandconcept Gerhard Schwed <gerhard.schwed@donau-uni.ac.at>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 */
 
 require_once dirname(__FILE__)."/inc.php";
@@ -46,17 +48,17 @@ if(!$request || $request->state < STATUS_REQUESTED) {
 	require_capability('block/elabel:audit', context_course::instance($labelcourseid));
 	//check if i am a student in the current course
 	require_capability('block/elabel:use', $context);
-	
+
 	if($request && $request->userid != $USER->id)
 		die;
-	
+
 	$editable = true;
 } else if($request && has_capability('block/elabel:audit', $context)) {
 	//to review the request i need to be a teacher in the current course
-	
+
 	if($request->state >= STATUS_REQUESTED)
 		$audit = true;
-	
+
 	if($request->state == STATUS_REQUESTED)
 		$editable = true;
 }
@@ -92,8 +94,8 @@ echo "</div>";
 if(!$editable) {
 	echo '
 	<script type="text/javascript">
-		$(":input").prop("disabled", true);
-		$( "#slider" ).slider({ disabled: true });
+	$(":input").prop("disabled", true);
+	$( "#slider" ).slider({ disabled: true });
 	</script>';
 }
 

@@ -16,10 +16,12 @@
 
 /**
  * Collection of useful functions and constants
-*
-* @package   block_elabel
-* @copyright Florian Jungwirth <fjungwirth@gtn-solutions.com>
-* @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @package    block_elabel
+ * @copyright  gtn gmbh <office@gtn-solutions.com>
+ * @author	   Florian Jungwirth <fjungwirth@gtn-solutions.com>
+ * @ideaandconcept Gerhard Schwed <gerhard.schwed@donau-uni.ac.at>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 */
 
 require_once dirname(__FILE__)."/inc.php";
@@ -37,7 +39,7 @@ $total = block_elabel_get_score_for_request($request);
 if($total >= $labelconfig->labelprofessional)
 	$class = "label_professional";
 elseif($total >= $labelconfig->labeladvanced)
-	$class = "label_advanced";
+$class = "label_advanced";
 else
 	$class = "label_none";
 
@@ -49,7 +51,7 @@ block_elabel_init_js_css();
 
 $html = '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -62,75 +64,75 @@ $html = '
 
 /*<![CDATA[*/
 img.c2 {
-	margin: 0;
-	padding: 0;
-	border: 0;
+margin: 0;
+padding: 0;
+border: 0;
 }
 
 div.c1 {
-	clear: both;
+clear: both;
 }
 /*]]>*/
 
 </style>
 </head>
 
-<body>
-	<div id="exaLabel">
-		<div id="exaLabel-Award">
+<body class="print">
+<div id="exaLabel">
+<div id="exaLabel-Award">
 
-			<div class="exaLabel-AwardLogo">
-				<img src="pix/logo.jpg" alt="" />
-			</div>
+<div class="exaLabel-AwardLogo">
+<img src="pix/logo.jpg" alt="" />
+</div>
 
-			<h1>E-Learning Label</h1>
+<h1>E-Learning Label</h1>
 
-			<p>Dem Antrag auf Vergabe eines E-Learning Labels für den Lehrgang</p>
+<p>Dem Antrag auf Vergabe eines E-Learning Labels für den Lehrgang</p>
 
-			<p class="exaLabel-Award-Course">'.$request->coursename.'</p>
+<p class="exaLabel-Award-Course">'.$request->coursename.'</p>
 
-			<p>Jhg '.$request->year.', SKZ '.$request->internalnumber. '</p>
+<p>Jhg '.$request->year.', SKZ '.$request->internalnumber. '</p>
 
-			<p>wird stattgegeben.</p>
-			<br />
-			<p>Der gegenständliche Lehrgang kann mit dem Label</p>
+<p>wird stattgegeben.</p>
+<br />
+<p>Der gegenständliche Lehrgang kann mit dem Label</p>
 
-			<div class="exaLabel-AwardLabel">
-				<img src="'.get_string($class.'_pic','block_elabel').'" alt="" />
-			</div>
+<div class="exaLabel-AwardLabel">
+<img src="'.get_string($class.'_pic','block_elabel').'" alt="" />
+</div>
 
-			<p>gekennzeichnet werden.</p>
+<p>gekennzeichnet werden.</p>
 
-			<br /> <br />
+<br /> <br />
 
-			<p>'.get_string($class.'_text','block_elabel').'</p>
+<p>'.get_string($class.'_text','block_elabel').'</p>
 
-			<br /> <br />
+<br /> <br />
 
-			<p class="exaLabel-City">Krems, '.date("d.m.Y",$request->timecreated).'</p>
+<p class="exaLabel-City">Krems, '.date("d.m.Y",$request->timecreated).'</p>
 
-			<br /> <br /> <br />
-			<table class="exaLabel-AwardDate">
-				<tr>
-					<td>
-						<hr>
-							<br /> Dipl.-Ing. Dr. Erwin Bratengeyer <br /> E-Learning Center
-					</td>
-					<td>
-						<hr>
-							<br /> Mag. Dr. Brigitte Hahn, MAS <br /> Qualitätsmanagement und
-							Lehrentwicklung
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
+<br /> <br /> <br />
+<table class="exaLabel-AwardDate">
+<tr>
+<td>
+<hr>
+<br /> Dipl.-Ing. Dr. Erwin Bratengeyer <br /> E-Learning Center
+</td>
+<td>
+<hr>
+<br /> Mag. Dr. Brigitte Hahn, MAS <br /> Qualitätsmanagement und
+Lehrentwicklung
+</td>
+</tr>
+</table>
+</div>
+</div>
 </body>
 </html>';
 
 echo $html;die;
 /*
-// create new PDF document
+ // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 $pdf->setPrintHeader(false);
@@ -149,9 +151,9 @@ $pdf->Text(65, 70, 'E-Learning Label');
 $pdf->SetFont('helvetica', '', 10, '', 'false');
 $pdf->SetXY(165, 90);
 $pdf->writeHTML('
-			<p>Dem Antrag auf Vergabe eines E-Learning Labels für den Lehrgang</p>
-			<p class="exaLabel-Award-Course">name</p>
-			<p>Jhg WS2015 SKZ 123</p>
-			<p>wird stattgegeben</p>');
+		<p>Dem Antrag auf Vergabe eines E-Learning Labels für den Lehrgang</p>
+		<p class="exaLabel-Award-Course">name</p>
+		<p>Jhg WS2015 SKZ 123</p>
+		<p>wird stattgegeben</p>');
 
 $pdf->Output('label.pdf');*/

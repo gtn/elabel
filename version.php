@@ -18,7 +18,9 @@
  * Version details
  *
  * @package    block_elabel
- * @copyright  2014 onwards Florian Jungwirth
+ * @copyright  gtn gmbh <office@gtn-solutions.com>
+ * @author	   Florian Jungwirth <fjungwirth@gtn-solutions.com>
+ * @ideaandconcept Gerhard Schwed <gerhard.schwed@donau-uni.ac.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
