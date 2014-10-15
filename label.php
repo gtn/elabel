@@ -103,7 +103,7 @@ clear: both;
 
 <p>gekennzeichnet werden.</p>
 
-<br /> <br />
+<br />
 
 <p>'.get_string($class.'_text','block_elabel').'</p>
 

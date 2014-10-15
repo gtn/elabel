@@ -324,7 +324,7 @@ function block_elabel_get_metainfo_page($data) {
 				</tr>
 				
 				<tr class="exalabel-Angaben">
-					<td class="exalabel-row-right">Nummer oder interne Bezeichnung (optional)</td>
+					<td class="exalabel-row-right">Studienkennzahl (SKZ)</td>
 					<td>
 						<input id="" class="" type="text" value="'.$data->coursenumber.'" name="coursenumber">
 					</td>
@@ -495,9 +495,9 @@ function block_elabel_get_howto_page($data) {
 		Eintragungen sind jeweils in den rot umrandeten Feldern vorgesehen. Die Selbstevaluation anhand der
 		Evaluationsformulare besteht aus zwei Schritten: <br/><br/>
 
-		1.) Anhand von Indikatoren wird das jeweilige Evaluationskriterium erläutert. Es erfolgt eine Orientierung durch Angaben (Listbox) in der Spalte <b><trifft zu></b>. Abhängig von der dreistufigen Auswahl   ("gar nicht", "teilweise", "gänzlich") wird ein min-Wert und ein max-Wert ermittelt. Es erscheint in Abhängigkeit dieser Werte der Zellbereich des Sliders in grüner oder roter Schattierung. Die  min- und max-Werte führen zur Eingrenzung des Evaluationsbereiches. Da die Indikatoren jedoch keine vollständige Charakterisierung zulassen, kann der Slider  über die Grenzen der beiden Werte hinausverschoben werden.
+		1.) Anhand von Indikatoren wird das jeweilige Evaluationskriterium erläutert. Es erfolgt eine Orientierung durch Angaben (Listbox) in der Spalte <b><trifft zu></b>. Abhängig von der dreistufigen Auswahl   ("gar nicht", "teilweise", "gänzlich") wird ein min-Wert und ein max-Wert ermittelt. Es erscheint in Abhängigkeit dieser Werte der Zellbereich des Schiebereglers in grüner oder roter Schattierung. Die  min- und max-Werte führen zur Eingrenzung des Evaluationsbereiches. Da die Indikatoren jedoch keine vollständige Charakterisierung zulassen, kann der Slider  über die Grenzen der beiden Werte hinausverschoben werden.
 		<br/><br/>
-		2.) Die eigentliche Selbstevaluation erfolgt durch Angabe eines <b>Erfüllungsgrades [in %]</b> mittels Positionierung eines Sliders auf einer Prozentskala (siehe Beispielabbildung).
+		2.) Die eigentliche Evaluation erfolgt durch <b>Angabe eines Erfüllungsgrades</b> [in %]. Dies geschieht mittels Positionierung eines Schiebereglers auf einer Prozentskala (siehe Beispielabbildung).
 		<div class="exaLabel-howto-text">
 			<img style="width:70%" src="pix/slider.png">
 		</div>
@@ -518,14 +518,12 @@ function block_elabel_get_howto_page($data) {
 	</td>
 	</tr>
 	<tr>
-	<td class="exaLabel-Description-head" colspan="2"><h2>Was ist noch zu tun?</h2>
+	<td class="exaLabel-Description-head" colspan="2"><h2>Wie geht es weiter?</h2>
 	</td>
 	</tr>
 	<tr class="exalabel-Angaben">
 	<td colspan="2">
-	Die Auswertung bildet die Grundlage für den anschliessenden Audit. Das fertig ausgefüllte Formular bitte abspeichern
-	und senden an: elearning@donau-uni.ac.at  mit Betreff: Selbstevaluation.
-	Im Anschluss daran erfolgt der Audit am E-Learning Center nach Terminvereinbarung.	
+	Durch das Absenden der Evaluation wird das ELC automatisch über das Vorliegen einer Einreichung informiert. Im Anschluss erfolgt der Audit am ELC nach Terminvereinbarung.
 	</td>
 	</tr>
 	</tbody>
@@ -588,7 +586,8 @@ function block_elabel_get_evaluation_page($pageid, $request) {
 							$content .= '
 							<tr>
 								<td colspan="2"class="exalabel-row exalabel-row-more">'.$question->title.':
-								<textarea name="'.$question->id.'" rows="4" cols="50">'.((isset($answers[$question->id])) ? $answers[$question->id] : '').'</textarea></td>
+								<input type="text" name="'.$question->id.'" value="'.((isset($answers[$question->id])) ? $answers[$question->id] : '').'"/>
+								</td>
 							</tr>';
 						}
 

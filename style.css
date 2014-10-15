@@ -273,15 +273,24 @@ html,body {
 	background-color: #f9f9f9;
 }
 
-.exaLabel-Table tbody .exaLabel-Description,.exaLabel-Table tbody .exaLabel-Description-head
+.span {
+	background-color: yellow;
+}
+.exaLabel-Table tbody .exaLabel-Description-head
 	{
 	text-align: center;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	color: #01267f;
 	background-color: #fff;
 }
-
+.exaLabel-Table tbody .exaLabel-Description
+	{
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #fff;
+}
 .exaLabel-Table tbody .exalabel-topic {
 	text-align: center;
 	font-weight: bold;
@@ -405,6 +414,7 @@ html,body {
 	font-weight: bold;
 	margin-top: 10px;
 	margin-bottom: 10px;
+	font-size: 16pt;
 }
 
 #exaLabel-Award .exaLabel-AwardDate {
@@ -480,7 +490,12 @@ table.exaLabel-AwardDate td {
 	margin-left: 75px;
 	text-align: left !important;
 	margin-top: 40px;
+	font-size: 10pt;
 }
 body.print {
     height: auto;
+}
+body.print .exaLabel-AwardDate td {
+    vertical-align: top;
+    font-size: 10pt;
 }
