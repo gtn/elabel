@@ -237,8 +237,8 @@ function block_elabel_get_coursecat_infos($courseid) {
 				$faculty = $cat->name;
 			if($i == 1)
 				$department = $cat->name;
-			if($i == 2)
-				$center = $cat->name;
+			#if($i == 2)
+			#	$center = $cat->name;
 			
 			$i++;
 		}
@@ -249,7 +249,7 @@ function block_elabel_get_coursecat_infos($courseid) {
  * Prints first form page
  */
 function block_elabel_get_metainfo_page($data) {
-	global $DB,$PAGE,$USER;
+	global $CFG,$DB,$PAGE,$USER;
 
 	if(!$data) {
 		$data = new stdClass();
@@ -259,12 +259,15 @@ function block_elabel_get_metainfo_page($data) {
 		$data->center = '';
 		
 		$courseid = required_param('labelcourseid', PARAM_INT);
-		list($data->faculty,$data->department,$data->center) = block_elabel_get_coursecat_infos($courseid);
+		#list($data->faculty,$data->department,$data->center) = block_elabel_get_coursecat_infos($courseid);
+		list($data->department,$data->center) = block_elabel_get_coursecat_infos($courseid); // changed by G. Schwed; no faculty required
 
 		$data->coursename = $DB->get_record('course',array('id' => $courseid))->fullname;
+		$data->officialcoursename = '';
 		$data->coursenumber = '';
 		$data->internalnumber = '';
 		$data->completiontype = '';
+		$data->dateofevaluation = '';
 		$data->ects = '';
 		$data->lessons = '';
 		$data->days = '';
@@ -277,7 +280,8 @@ function block_elabel_get_metainfo_page($data) {
 		$data->courseteacher = '';
 		$data->coursehead = '';
 		$data->departmenthead = '';
-		$data->year = '';
+		$data->year = ''; // course start
+		$data->year2 = ''; // course end
 		$data->departmentnotification = false;
 		$data->timecreated = time();
 	}
@@ -294,7 +298,11 @@ function block_elabel_get_metainfo_page($data) {
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Fakultät</td>
 					<td>
-						<input id="" class="" type="text" value="'.$data->faculty.'" name="faculty" readonly>
+						<select name="faculty">
+							<option value="Gesundheit-Medizin" ' . ((($data->faculty) == "Gesundheit und Medizin") ? ' selected ' : '') .'>Gesundheit und Medizin</option>
+							<option value="Wirtschaft-Globalisierung-Recht" ' . ((($data->faculty) == "Wirtschaft und Globalisierung") ? ' selected ' : '') .'>Wirtschaft und Globalisierung</option>
+							<option value="Bildung-Kunst-Architektur" ' . ((($data->faculty) == "Bildung, Kunst und Architektur") ? ' selected ' : '') .'>Bildung, Kunst und Architektur</option>
+						</select>
 					</td>
 				</tr>
 				
@@ -306,7 +314,7 @@ function block_elabel_get_metainfo_page($data) {
 				</tr>
 				
 				<tr class="exalabel-Angaben">
-					<td class="exalabel-row-right">Zentrum</td>
+					<td class="exalabel-row-right">Zentrum/Fachbereich/Org.-Einheit</td>
 					<td>
 						<input id="" class="" type="text" value="'.$data->center.'" name="center" readonly>
 					</td>
@@ -317,24 +325,32 @@ function block_elabel_get_metainfo_page($data) {
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben">
-					<td class="exalabel-row-right">Lehrgangsbezeichnung</td>
+					<td class="exalabel-row-right">Lehrgangsbezeichnung (laut Moodle):</td>
 					<td>
 						<input id="" class="" type="text" value="'.$data->coursename.'" name="coursename" readonly>
 					</td>
 				</tr>
 				
 				<tr class="exalabel-Angaben">
-					<td class="exalabel-row-right">Studienkennzahl (SKZ)</td>
+					<td class="exalabel-row-right">Lehrgangsbezeichnung (laut Verordnung):</td>
+					<td>
+						<input id="" class="" type="text" value="'.$data->officialcoursename.'" name="officialcoursename">
+					</td>
+				</tr>
+				
+				<tr class="exalabel-Angaben">
+					<td class="exalabel-row-right">Studienkennzahl (SKZ)
+					    <br><a href="file:///N:/Information/DLE_Studienrecht/Studienangebot/Studienangebot.xls">file:///N:/Information/DLE_Studienrecht/Studienangebot/Studienangebot.xls</a> </td>
 					<td>
 						<input id="" class="" type="text" value="'.$data->coursenumber.'" name="coursenumber">
 					</td>
 				</tr>
 				
 				<tr class="exalabel-Angaben">
-					<td class="exalabel-row-right">Jahrgang (Start)</td>
+					<td class="exalabel-row-right">Lehrgangsstart</td>
 					<td>
 						<select name="year">
-							<option value="WS2013" ' . ((($data->year) == "WS2013") ? ' selected ' : '') .'>WS2013</option>
+							<option value="WS2013" ' . ((($data->year) == "WS2014") ? ' selected ' : '') .'>WS2014</option>
 							<option value="SS2014" ' . ((($data->year) == "SS2014") ? ' selected ' : '') .'>SS2014</option>
 							<option value="WS2014" ' . ((($data->year) == "WS2014") ? ' selected ' : '') .'>WS2014</option>
 							<option value="SS2015" ' . ((($data->year) == "SS2015") ? ' selected ' : '') .'>SS2015</option>
@@ -346,6 +362,29 @@ function block_elabel_get_metainfo_page($data) {
 						</select>
 					</td>
 				</tr>
+				<tr class="exalabel-Angaben">
+					<td class="exalabel-row-right">Lehrgangsende</td>
+					<td>
+						<select name="year2">
+							<option value="SS2015" ' . ((($data->year2) == "SS2015") ? ' selected ' : '') .'>SS2015</option>
+							<option value="WS2015" ' . ((($data->year2) == "WS2015") ? ' selected ' : '') .'>WS2015</option>
+							<option value="SS2016" ' . ((($data->year2) == "SS2016") ? ' selected ' : '') .'>SS2016</option>
+							<option value="WS2016" ' . ((($data->year2) == "WS2016") ? ' selected ' : '') .'>WS2016</option>
+							<option value="SS2017" ' . ((($data->year2) == "SS2017") ? ' selected ' : '') .'>SS2017</option>
+							<option value="WS2017" ' . ((($data->year2) == "WS2017") ? ' selected ' : '') .'>WS2017</option>
+							<option value="SS2018" ' . ((($data->year2) == "SS2017") ? ' selected ' : '') .'>SS2017</option>
+							<option value="WS2018" ' . ((($data->year2) == "WS2017") ? ' selected ' : '') .'>WS2017</option>
+							<option value="SS2019" ' . ((($data->year2) == "SS2017") ? ' selected ' : '') .'>SS2017</option>
+							<option value="WS2019" ' . ((($data->year2) == "WS2017") ? ' selected ' : '') .'>WS2017</option>
+						</select>
+					</td>
+				</tr>
+				<tr class="exalabel-Angaben">
+					<td class="exalabel-row-right">vorauss. Termin für Studierendenbefragung:</td>
+					<td>
+						<input id="" class="" type="text" value="'.$data->dateofevaluation.'" name="dateofevaluation">
+					</td>
+				</tr>
 				
 				<tr class="exalabel-Angaben">
 					<td class="exalabel-row-right">Nummer oder interne Bezeichnung (optional)</td>
@@ -355,7 +394,7 @@ function block_elabel_get_metainfo_page($data) {
 				</tr>
 				
 				<tr class="exalabel-Angaben">
-					<td class="exalabel-row-right">Lehrgangsabschluss</td>
+					<td class="exalabel-row-right">Lehrgangsabschlussbezeichnung</td>
 					<td>
 						<select name="completiontype">
 							<option value="Master" ' . ((($data->completiontype) == "Master") ? ' selected ' : '') .'>Master</option>
@@ -390,14 +429,6 @@ function block_elabel_get_metainfo_page($data) {
 					<td class="exalabel-row-right">Lehrgangsdauer in Semester</td>
 					<td>
 						<input id="" class="" type="text" value="'.$data->semester.'" name="semester">
-					</td>
-				</tr>
-				
-				<tr class="exalabel-Angaben">
-					<td class="exalabel-row-right">Lehrgangsabschlusstermin für 
-						Studierendenbefragung  (Monat/Jahr)</td>
-					<td>
-						<input id="" class="" type="text" value="'.$data->survey.'" name="survey">
 					</td>
 				</tr>
 				
@@ -492,14 +523,14 @@ function block_elabel_get_howto_page($data) {
 	<tr class="exalabel-Angaben">
 	<td colspan="2">
 		Die Evaluation erfolgt anhand der Arbeitsblätter <b>Angaben zum LG</b> und der sieben Evaluationsformulare <b>1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.</b><br/>
-		Eintragungen sind jeweils in den rot umrandeten Feldern vorgesehen. Die Selbstevaluation anhand der
+		Die Selbstevaluation anhand der
 		Evaluationsformulare besteht aus zwei Schritten: <br/><br/>
 
 		1.) Anhand von Indikatoren wird das jeweilige Evaluationskriterium erläutert. Es erfolgt eine Orientierung durch Angaben (Listbox) in der Spalte <b><trifft zu></b>. Abhängig von der dreistufigen Auswahl   ("gar nicht", "teilweise", "gänzlich") wird ein min-Wert und ein max-Wert ermittelt. Es erscheint in Abhängigkeit dieser Werte der Zellbereich des Schiebereglers in grüner oder roter Schattierung. Die  min- und max-Werte führen zur Eingrenzung des Evaluationsbereiches. Da die Indikatoren jedoch keine vollständige Charakterisierung zulassen, kann der Slider  über die Grenzen der beiden Werte hinausverschoben werden.
 		<br/><br/>
 		2.) Die eigentliche Evaluation erfolgt durch <b>Angabe eines Erfüllungsgrades</b> [in %]. Dies geschieht mittels Positionierung eines Schiebereglers auf einer Prozentskala (siehe Beispielabbildung).
 		<div class="exaLabel-howto-text">
-			<img style="width:70%" src="pix/slider.png">
+			<img style="width:70%" src="pix/slider.jpg">
 		</div>
 	</td>
 	</tr>
@@ -510,6 +541,9 @@ function block_elabel_get_howto_page($data) {
 	</tr>
 	<tr class="exalabel-Angaben">
 	<td colspan="2">
+		
+		Mit dem zweistufigen Label „E-Learning Advanced“ und „E-Learning Professional“, wird der E-Learning Einsatz sowohl quantitativ als auch qualitativ verdeutlicht. Für die Erreichung des Labels „E-Learning Advanced“ ist zumindest jeweils eine mittlere Qualitäts- und Quantitätsstufe erforderlich, für die Erreichung des Labels „E-Learning Professional“ ist jeweils eine hohe Qualitäts- und Quantitätsstufe erforde. Für Lehrgänge ohne oder mit nur niederschwelligem E-Learning Einsatz ist keine Labelkennzeichnungorgesehen.
+		<p></p>
 		Die Berechnung und Auswertung kann dem Arbeitsblatt Auswertung entnommen werden.
 		Die Berechnung erfolgt durch Ermittlung von Punktewerten, die sich aus aus dem jeweiligen eingegebenen Erfüllungsgrad und der zugehörigen vorgegebenen Gewichtung ergibt.
 		Aus den dreistufigen Angaben in den Feldern <trifft zu> resultiert eine Bereichseinschränkung des möglichen Erfüllungsgrades, die jedoch von der Erfüllungsgradangabe mittels Slider überschrieben werden kann.
@@ -666,7 +700,7 @@ function block_elabel_save_formdata($data, &$requestid, $courseid) {
 		$DB->delete_records('block_elabel_audit',array('requestid'=>$requestid));
 		$DB->insert_record('block_elabel_audit', $data);
 		
-		if($request->state == STATUS_REQUESTED) {
+		if($request->state == STATUS_REQUESTED && $data['submittype'] == 'form') {
 			$request->state = STATUS_GRANTED;
 			$request->timegranted = time();
 			
@@ -733,7 +767,7 @@ function block_elabel_get_result_page($request) {
 						if(!has_capability('block/elabel:audit', context_course::instance($COURSE->id)))
 							$content .= '
 								<div class="infotext">'.(($request->state < STATUS_REQUESTED) ? get_string('infotext','block_elabel') : get_string('inforequested','block_elabel')).'</div>
-								<div class="submitbutton"><input type="submit" value="Antrag absenden"></div>';
+								<div class="submitbutton", align="center"><input type="submit" value="Antrag absenden"></div>';
 					$content .= '</td>
 				</tr>
 			
@@ -805,7 +839,8 @@ function block_elabel_submit_request($requestid) {
 	
 	$DB->update_record('block_elabel_request', $request);
 	//write email notification to course teachers
-	$teachers = block_elabel_get_course_teachers(context_course::instance($request->courseid));
+	#$teachers = block_elabel_get_course_teachers(context_course::instance($request->courseid)); // original
+	$teachers = block_elabel_get_course_teachers(context_course::instance($COURSE->id)); // changed by G. Schwed
 	$textParams = new stdClass();
 	$textParams->username = $request->username;
 	$textParams->coursename = $request->coursename;
@@ -881,9 +916,15 @@ function block_elabel_get_audit_page($request) {
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben-Audit">
-					<td class="exalabel-row-right">Lehrgangsbezeichnung:</td>
+					<td class="exalabel-row-right">Lehrgangsbezeichnung (laut Moodle):</td>
 					<td>
 						'.$request->coursename.'
+					</td>
+				</tr>
+				<tr class="exalabel-Angaben-Audit">
+					<td class="exalabel-row-right">Lehrgangsbezeichnung (laut Verordnung):</td>
+					<td>
+						'.$request->officialcoursename.'
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben-Audit">
@@ -893,15 +934,27 @@ function block_elabel_get_audit_page($request) {
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben-Audit">
+					<td class="exalabel-row-right">voraus. Termin für Studierendenbefragung:</td>
+					<td>
+						'.$request->dateofevaluation.'
+					</td>
+				</tr>
+				<tr class="exalabel-Angaben-Audit">
 					<td class="exalabel-row-right">Nummer od. interne Bezeichnung:</td>
 					<td>
 						'.$request->internalnumber.'
 					</td>
 				</tr>
 				<tr class="exalabel-Angaben-Audit">
-					<td class="exalabel-row-right">Jahrgang (Start):</td>
+					<td class="exalabel-row-right">Lehrgangsstart:</td>
 					<td>
 						'.$request->year.'
+					</td>
+				</tr>
+				<tr class="exalabel-Angaben-Audit">
+					<td class="exalabel-row-right">Lehrgangsende:</td>
+					<td>
+						'.$request->year2.'
 					</td>
 				</tr>
 			</tbody>
@@ -936,7 +989,7 @@ function block_elabel_get_audit_page($request) {
 				<tr>
 					<td class="exalabel-row-right">TeilnehmerInnen:</td>
 					<td>
-						<input type="text" name="participants" value="'.(isset($audit->participants) ? $audit->participants : '').'"/>
+						<textarea name="participants" rows="4" cols="50">'.((isset($audit->participants)) ? $audit->participants : '').'</textarea>
 					</td>
 				</tr>
 				<tr>
@@ -956,6 +1009,7 @@ function block_elabel_get_audit_page($request) {
 					<td></td>
 					<td class="exalable-right">
 						<input type="hidden" name="formpage" value="'.PAGE_AUDIT.'"/>
+						<input type="hidden" name="submittype" value="form"/>
 						<input type="submit" value="Absenden">
 					</td>
 				</tr>
@@ -963,4 +1017,27 @@ function block_elabel_get_audit_page($request) {
 		</table>
 		</form>';
 }
-
+/*
+						<select name="month3">
+							<option value="Januar" ' . ((($month3) == "Jänner") ? ' selected ' : '') .'>Jänner</option>
+							<option value="Februar" ' . ((($month3) == "Februar") ? ' selected ' : '') .'>Februar</option>
+							<option value="Mär" ' . ((($mont3h) == "März") ? ' selected ' : '') .'>März</option>
+							<option value="April" ' . ((($month3) == "April") ? ' selected ' : '') .'>April</option>
+							<option value="Mai" ' . ((($month3) == "Mai") ? ' selected ' : '') .'>Mai</option>
+							<option value="Juni" ' . ((($month3) == "Juni") ? ' selected ' : '') .'>Juni</option>
+							<option value="Juli" ' . ((($month3) == "Juli") ? ' selected ' : '') .'>Juli</option>
+							<option value="August" ' . ((($month3) == "August") ? ' selected ' : '') .'>August</option>
+							<option value="September" ' . ((($month3) == "September") ? ' selected ' : '') .'>September</option>
+							<option value="Oktober" ' . ((($month3) == "Oktober") ? ' selected ' : '') .'>Oktober</option>
+							<option value="November" ' . ((($month3) == "November") ? ' selected ' : '') .'>November</option>
+							<option value="Dezember" ' . ((($month3) == "Dezember") ? ' selected ' : '') .'>Dezember</option>
+						</select>
+						<select name="year3">
+							<option value="2015" ' . ((($year3) == "2015") ? ' selected ' : '') .'>2015</option>
+							<option value="2016" ' . ((($year3) == "2015") ? ' selected ' : '') .'>2016</option>
+							<option value="2017" ' . ((($year3) == "2015") ? ' selected ' : '') .'>2017</option>
+							<option value="2018" ' . ((($year3) == "2015") ? ' selected ' : '') .'>2018</option>
+							<option value="2019" ' . ((($year3) == "2015") ? ' selected ' : '') .'>2019</option>
+						</select>
+						<?php $data->dateofevaluation = $month3 . " " . $year3; ?>
+*/

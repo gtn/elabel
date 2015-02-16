@@ -22,8 +22,10 @@
         <FIELD NAME="department" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="center" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="coursename" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="officialcoursename" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="coursenumber" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="year" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="year2" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="completiontype" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="master / akad. expertin / certified program"/>
         <FIELD NAME="ects" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="lessons" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
@@ -44,6 +46,7 @@
         <FIELD NAME="timesubmitted" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="timegranted" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="internalnumber" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="dateofevaluation" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

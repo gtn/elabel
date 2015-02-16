@@ -34,6 +34,7 @@ $string['tab_request'] = 'Label Antrag';
 
 $string['title'] = 'Kursname';
 $string['faculty'] = 'Fakultät';
+$string['department'] = 'Department';
 $string['username'] = 'Antragsteller';
 $string['timecreated'] = 'Datum Antragstellung';
 $string['timegranted'] = 'Datum Erteilung';
@@ -52,7 +53,11 @@ $string['label_professional'] = 'E-Learning Professional';
 $string['label_professional_pic'] = 'pix/Selbstevaluation_eLearningLabel_pro.jpg';
 $string['label_professional_text'] = 'Das Label <b>E-Learning Professional</b> kennzeichnet Universitätslehrgänge<br/>der Donau-Universität Krems bei denen bildungstechnologische Ressourcen<br/>und Methoden in einer hohen Qualitäts- und Quantitätsstufe zum Einsatz kommen.';
 
-$string['infotext'] = 'Ich bin mit dem Ergebnis zufrieden und möchte den Antrag endgültig absenden. Danach kann ich keine Änderungen mehr vornehmen.';
+$string['infotext'] = 'Die Mindestpunkteanzahl  beträgt für „E-Learning Advanced“  55 und für „E-Learning Professional“ 90 (von 100).
+<p></p>
+Sie können jetzt noch zu früheren Seiten zurückgehen und Änderungen vornehmen.<br>
+Nach dem Absenden sind keine Änderungen mehr möglich.
+<p></p>';
 $string['inforequested'] = 'Der Antrag wurde bereits zur Einsichtnahme eingereicht und es sind keine Änderungen mehr möglich.';
 
 $string['request_sent'] = 'Der Benutzer {$a->username} hat soeben einen E-Learning-Label Antrag für den Kurs {$a->coursename} eingebracht: {$a->form}';
@@ -60,3 +65,4 @@ $string['request_granted'] = 'Der Antrag für den Kurs {$a->coursename} wurde be
 
 $string['student_description'] = 'In den folgenden Kursen bin ich Teacher/Manager und kann ein E-Learning-Label beantragen bzw. den aktuellen Status einsehen.';
 $string['teacher_description'] = 'Folgende E-Learning-Label Anträge sind bisher eingegangen:';
+$string['edit'] = 'Antrag erstellen / editieren / abrufen';

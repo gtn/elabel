@@ -89,9 +89,9 @@ clear: both;
 
 <p>Dem Antrag auf Vergabe eines E-Learning Labels für den Lehrgang</p>
 
-<p class="exaLabel-Award-Course">'.$request->coursename.'</p>
+<p class="exaLabel-Award-Course">'.$request->officialcoursename.'</p>
 
-<p>Jhg '.$request->year.', SKZ '.$request->internalnumber. '</p>
+<p>Jhg '.$request->year.', SKZ '.$request->coursenumber. '</p>
 
 <p>wird stattgegeben.</p>
 <br />

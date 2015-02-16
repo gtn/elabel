@@ -65,6 +65,9 @@ if(!$request || $request->state < STATUS_REQUESTED) {
 
 if($_POST && $editable) {
 	block_elabel_save_formdata($_POST,$requestid,$labelcourseid);
+	$request = $DB->get_record('block_elabel_request', array('id'=>$requestid));
+	if($request->state != STATUS_REQUESTED)
+	    $editable = false;
 }
 //requestid might have changed
 $request = $DB->get_record('block_elabel_request', array('id'=>$requestid));

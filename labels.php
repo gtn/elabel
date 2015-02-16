@@ -76,12 +76,12 @@ else {
 
 $table->head = array(
 		html_writer::link($PAGE->url . "&sorting=title", get_string('title','block_elabel')),
-		html_writer::link($PAGE->url . "&sorting=faculty", get_string('faculty','block_elabel')),
+		html_writer::link($PAGE->url . "&sorting=faculty", get_string('department','block_elabel')),
 		html_writer::link($PAGE->url . "&sorting=username", get_string('username','block_elabel')),
 		html_writer::link($PAGE->url . "&sorting=state", get_string('status','block_elabel')),
 		html_writer::link($PAGE->url . "&sorting=timecreated", get_string('timecreated','block_elabel')),
 		html_writer::link($PAGE->url . "&sorting=timegranted", get_string('timegranted','block_elabel')),
-		'');
+		html_writer::link($PAGE->url . "&sorting=timegranted", get_string('edit','block_elabel')));
 $status = array(STATUS_NEW => get_string('status_new','block_elabel'),
 		STATUS_INPROGRESS => get_string('status_inprogress','block_elabel'),
 		STATUS_REQUESTED => get_string('status_requested','block_elabel'),
